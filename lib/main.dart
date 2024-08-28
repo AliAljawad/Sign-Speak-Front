@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sign_speak/screens/login_screen.dart';
+import 'package:sign_speak/screens/sign_up_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: SignUpScreen(),
     );
     }
 }
