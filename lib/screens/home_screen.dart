@@ -98,21 +98,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
           'Camera Translation',
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
+            
           ),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            // Navigate back or perform any action
-          },
-        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -121,7 +117,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Container(
               width: double.infinity,
-              height: 200,
+              height: 300,
               color: _isTranslating ? Colors.black : Colors.grey[300],
               child: _buildCameraPreview(),
             ),
