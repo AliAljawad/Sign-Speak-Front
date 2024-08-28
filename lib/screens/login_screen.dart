@@ -6,11 +6,12 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           'Login',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -23,16 +24,21 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/images/logo.png',
-              height: 150, 
+            Center(
+              child: Image.asset(
+                'assets/images/logo.png',
+                height: 150,
+              ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Log in',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Log in',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -48,12 +54,12 @@ class LoginPage extends StatelessWidget {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
-                prefixIcon: Icon(Icons.lock), 
+                prefixIcon: Icon(Icons.lock),
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
-           Align(
+            Align(
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {},
@@ -71,7 +77,7 @@ class LoginPage extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 15),
-                minimumSize: const Size(double.infinity, 0), 
+                minimumSize: const Size(double.infinity, 0),
               ),
               child: const Text(
                 'Log in',
