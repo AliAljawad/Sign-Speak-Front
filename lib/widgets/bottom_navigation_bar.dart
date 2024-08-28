@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 import 'package:sign_speak/screens/history_screen.dart';
 import 'package:sign_speak/screens/home_screen.dart';
 import 'package:sign_speak/screens/profile_screen.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
-  const MyBottomNavigationBar({super.key});
+  final CameraDescription camera;
+
+  const MyBottomNavigationBar({super.key, required this.camera});
 
   @override
   State<MyBottomNavigationBar> createState() => _MyBottomNavigationBarState();
 }
 
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
-   int _selectedIndex = 0;
+    int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[
-    HomePage(),
-    HistoryPage(),
-    ProfilePage(),
-  ];
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      HomePage(camera: widget.camera),
+      const HistoryPage(),
+      const ProfilePage(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
