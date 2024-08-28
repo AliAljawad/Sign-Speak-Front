@@ -30,6 +30,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   onTap: _onItemTapped,
   selectedItemColor: Colors.blue,
   unselectedItemColor: Colors.grey,
+  showSelectedLabels: false, 
+  showUnselectedLabels: false,
   items: const [
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
