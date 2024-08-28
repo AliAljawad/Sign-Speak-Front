@@ -6,13 +6,15 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
+      appBar: AppBar(
+        title: const Text('Login Page'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-  
+            const Text('Log in'),
             const SizedBox(height: 20),
             const TextField(
               decoration: InputDecoration(
