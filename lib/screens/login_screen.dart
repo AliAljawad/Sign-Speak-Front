@@ -9,11 +9,16 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Login Page'),
       ),
-      body: Padding(
+      body:SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset(
+              'assets/images/logo.png', 
+              height: 100, 
+            ),
+            const SizedBox(height: 20),
             const Text('Log in'),
             const SizedBox(height: 20),
             const TextField(
@@ -46,6 +51,6 @@ class LoginPage extends StatelessWidget {
           ],
         ),
       ),
-    );
+      );
   }
 }
