@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class BottomNavigationBar extends StatefulWidget {
-  const BottomNavigationBar({super.key});
+class MyBottomNavigationBar extends StatefulWidget {
+  const MyBottomNavigationBar({super.key});
 
   @override
-  State<BottomNavigationBar> createState() => _BottomNavigationBarState();
+  State<MyBottomNavigationBar> createState() => _MyBottomNavigationBarState();
 }
 
-class _BottomNavigationBarState extends State<BottomNavigationBar> {
+class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -15,31 +15,36 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Selected Index: $_selectedIndex'),
+        child: Text(
+          'Selected Index: $_selectedIndex',
+          style: const TextStyle(fontSize: 24),
+        ),
       ),
      bottomNavigationBar: BottomNavigationBar(
-  items: const <BottomNavigationBarItem>[
+  currentIndex: _selectedIndex,
+  onTap: _onItemTapped,
+  selectedItemColor: Colors.blue,
+  unselectedItemColor: Colors.grey,
+  items: const [
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
-      label: 'Home',
+      label: "Home",
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.access_time),
-      label: 'History',
+      label: "History",
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.person),
-      label: 'Profile',
+      label: "Profile",
     ),
   ],
-  currentIndex: _selectedIndex,
-  onTap: _onItemTapped,
-),
+)
     );
   }
 }
- 
