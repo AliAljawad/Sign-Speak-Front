@@ -40,6 +40,60 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Widget _buildCameraPreview() {
+    return _isTranslating
+        ? FutureBuilder<void>(
+            future: _initializeControllerFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return CameraPreview(_controller);
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          )
+        : const Center(child: Icon(Icons.camera_alt, color: Colors.grey, size: 50));
+  }
+
+  Widget _buildVoiceDropdown() {
+    return DropdownButtonFormField<String>(
+      decoration: const InputDecoration(
+        labelText: 'Choose voice',
+        border: OutlineInputBorder(),
+      ),
+      items: <String>['Voice 1', 'Voice 2', 'Voice 3']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (String? value) {
+        // Handle voice selection
+      },
+    );
+  }
+
+  Widget _buildTranslateButton() {
+    return ElevatedButton(
+      onPressed: _toggleTranslating,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue,
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        minimumSize: const Size(double.infinity, 0),
+      ),
+      child: Text(
+        _isTranslating ? 'Stop Translating' : 'Start Translating',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,20 +123,7 @@ class _HomePageState extends State<HomePage> {
               width: double.infinity,
               height: 200,
               color: _isTranslating ? Colors.black : Colors.grey[300],
-              child: _isTranslating
-                  ? FutureBuilder<void>(
-                      future: _initializeControllerFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return CameraPreview(_controller);
-                        } else if (snapshot.hasError) {
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        } else {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    )
-                  : const Center(child: Icon(Icons.camera_alt, color: Colors.grey, size: 50)),
+              child: _buildCameraPreview(),
             ),
             const SizedBox(height: 20),
             const Text(
@@ -91,38 +132,9 @@ class _HomePageState extends State<HomePage> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            DropdownButtonFormField<String>(
-              decoration: const InputDecoration(
-                labelText: 'Choose voice',
-                border: OutlineInputBorder(),
-              ),
-              items: <String>['Voice 1', 'Voice 2', 'Voice 3']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? value) {
-                // Handle voice selection
-              },
-            ),
+            _buildVoiceDropdown(),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _toggleTranslating,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                minimumSize: const Size(double.infinity, 0),
-              ),
-              child: Text(
-                _isTranslating ? 'Stop Translating' : 'Start Translating',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ),
+            _buildTranslateButton(),
           ],
         ),
       ),
