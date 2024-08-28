@@ -17,17 +17,6 @@ class LoginPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Text(
-              'Forget password?',
-              style: TextStyle(
-                color: Colors.blue,
-              ),
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -35,8 +24,8 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/logo.png', // Update with the correct path to your logo image
-              height: 150, // Increased height for the logo
+              'assets/images/logo.png',
+              height: 150, 
             ),
             const SizedBox(height: 20),
             const Text(
@@ -47,30 +36,42 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 labelText: 'Email',
-                prefixIcon: Icon(Icons.email), // Email icon
+                prefixIcon: Icon(Icons.email),
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
-            TextField(
+            const TextField(
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
-                prefixIcon: Icon(Icons.lock), // Password icon
+                prefixIcon: Icon(Icons.lock), 
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
+           Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Forget password?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue, // Background color
+                backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 15),
-                minimumSize: const Size(double.infinity, 0), // Full width
+                minimumSize: const Size(double.infinity, 0), 
               ),
               child: const Text(
                 'Log in',
