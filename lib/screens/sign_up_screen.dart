@@ -47,6 +47,15 @@ class SignUpPage extends StatelessWidget {
       border: OutlineInputBorder(),
     ),
   ),
+  const SizedBox(height: 10),
+  const TextField(
+    obscureText: true,
+    decoration: InputDecoration(
+      labelText: 'Confirm Password',
+      prefixIcon: Icon(Icons.lock),
+      border: OutlineInputBorder(),
+    ),
+  ),
 ],
 
         ),
