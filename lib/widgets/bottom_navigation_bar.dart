@@ -21,14 +21,14 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> {
       body: Center(
         child: Text('Selected Index: $_selectedIndex'),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
+     bottomNavigationBar: BottomNavigationBar(
+  items: const <BottomNavigationBarItem>[
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
       label: 'Home',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.history),
+      icon: Icon(Icons.access_time),
       label: 'History',
     ),
     BottomNavigationBarItem(
@@ -36,7 +36,10 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> {
       label: 'Profile',
     ),
   ],
+  currentIndex: _selectedIndex,
+  onTap: _onItemTapped,
 ),
     );
   }
 }
+ 
