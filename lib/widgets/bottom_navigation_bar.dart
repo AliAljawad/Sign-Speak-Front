@@ -42,7 +42,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.access_time),
+            icon: Icon(Icons.history),
             label: "History",
           ),
           BottomNavigationBarItem(
