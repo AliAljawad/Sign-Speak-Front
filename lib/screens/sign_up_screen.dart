@@ -29,11 +29,14 @@ class SignUpPage extends StatelessWidget {
               height: 150,
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Create Account',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Create Account',
+                style: TextStyle(
+                   fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 20),
