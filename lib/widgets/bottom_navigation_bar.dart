@@ -22,8 +22,21 @@ class _BottomNavigationBarState extends State<BottomNavigationBar> {
         child: Text('Selected Index: $_selectedIndex'),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[],
-      ),
+      items: const <BottomNavigationBarItem>[
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      label: 'Home',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.history),
+      label: 'History',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: 'Profile',
+    ),
+  ],
+),
     );
   }
 }
