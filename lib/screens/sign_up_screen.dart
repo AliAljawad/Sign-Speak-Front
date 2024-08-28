@@ -30,6 +30,14 @@ class SignUpPage extends StatelessWidget {
       fontWeight: FontWeight.bold,
     ),
   ),
+   const SizedBox(height: 20),
+  const TextField(
+    decoration: InputDecoration(
+      labelText: 'Email',
+      prefixIcon: Icon(Icons.email),
+      border: OutlineInputBorder(),
+    ),
+  ),
 ],
 
         ),
