@@ -7,9 +7,27 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login Page'),
+        title: const Text(
+          'Login',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: const Text(
+              'Forget password?',
+              style: TextStyle(
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -17,8 +35,8 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/logo.png',
-              height: 100,
+              'assets/images/logo.png', // Update with the correct path to your logo image
+              height: 150, // Increased height for the logo
             ),
             const SizedBox(height: 20),
             const Text(
@@ -32,6 +50,7 @@ class LoginPage extends StatelessWidget {
             TextField(
               decoration: InputDecoration(
                 labelText: 'Email',
+                prefixIcon: Icon(Icons.email), // Email icon
                 border: OutlineInputBorder(),
               ),
             ),
@@ -40,20 +59,18 @@ class LoginPage extends StatelessWidget {
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Password',
+                prefixIcon: Icon(Icons.lock), // Password icon
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
-            TextButton(
-              onPressed: () {},
-              child: const Text('Forget password?'),
-            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue, // Background color
                 padding: const EdgeInsets.symmetric(vertical: 15),
-                minimumSize: const Size(double.infinity, 0),
+                minimumSize: const Size(double.infinity, 0), // Full width
               ),
               child: const Text(
                 'Log in',
