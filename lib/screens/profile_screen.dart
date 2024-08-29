@@ -8,6 +8,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final TextEditingController _nameController =
+    TextEditingController(text: "John Doe");
+final TextEditingController _emailController =
+    TextEditingController(text: "JohnDoe@gmail.com");
+final TextEditingController _passwordController =
+    TextEditingController(text: "***************");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
