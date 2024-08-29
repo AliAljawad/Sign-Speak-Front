@@ -31,6 +31,10 @@ void _toggleEdit() {
       ),
       body: Column(
   children: [
+    CircleAvatar(
+  radius: 50,
+  backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+),
     TextField(
       controller: _nameController,
       decoration: const InputDecoration(labelText: 'Name'),
