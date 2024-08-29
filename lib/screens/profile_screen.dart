@@ -29,17 +29,21 @@ void _toggleEdit() {
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: Column(
-  children: [
-    CircleAvatar(
-  radius: 50,
-  backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-),
-    TextField(
-      controller: _nameController,
-      decoration: const InputDecoration(labelText: 'Name'),
-      enabled: _isEditing,
-    ),
+      body:Padding(
+  padding: const EdgeInsets.all(20.0),
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      const CircleAvatar(
+        radius: 50,
+        backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+      ),
+      const SizedBox(height: 30),
+      TextField(
+        controller: _nameController,
+        decoration: const InputDecoration(labelText: 'Name'),
+        enabled: _isEditing,
+      ),
     TextField(
       controller: _emailController,
       decoration: const InputDecoration(labelText: 'Email'),
@@ -56,8 +60,10 @@ void _toggleEdit() {
   child: Text(_isEditing ? 'Save changes' : 'Edit Profile'),
 )
   ],
-)
+),
+    ),
 
     );
+
   }
 }
