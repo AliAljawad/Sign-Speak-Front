@@ -44,18 +44,44 @@ void _toggleEdit() {
       ),
       const SizedBox(height: 30),
       TextField(
-        controller: _nameController,
-        decoration: const InputDecoration(labelText: 'Name'),
-        enabled: _isEditing,
-      ),
+  controller: _nameController,
+  decoration: InputDecoration(
+    labelText: 'Name',
+    border: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+  ),
+  enabled: _isEditing,
+),
+
     TextField(
       controller: _emailController,
-      decoration: const InputDecoration(labelText: 'Email'),
+      decoration:  InputDecoration(labelText: 'Email',
+       border: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+      borderRadius: BorderRadius.circular(8.0),
+    ),),
       enabled: _isEditing,
     ),
     TextField(
       controller: _passwordController,
-      decoration: const InputDecoration(labelText: 'Password'),
+      decoration:  InputDecoration(labelText: 'Password', border: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+      borderRadius: BorderRadius.circular(8.0),
+    ),),
       obscureText: true,
       enabled: _isEditing,
     ),
