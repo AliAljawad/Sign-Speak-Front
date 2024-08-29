@@ -7,10 +7,10 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.camera});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   bool _isTranslating = false;
