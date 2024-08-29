@@ -14,6 +14,14 @@ final TextEditingController _emailController =
     TextEditingController(text: "JohnDoe@gmail.com");
 final TextEditingController _passwordController =
     TextEditingController(text: "***************");
+    bool _isEditing = false;
+
+void _toggleEdit() {
+  setState(() {
+    _isEditing = !_isEditing;
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +44,10 @@ final TextEditingController _passwordController =
       decoration: const InputDecoration(labelText: 'Password'),
       obscureText: true,
     ),
+    ElevatedButton(
+  onPressed: _toggleEdit,
+  child: Text(_isEditing ? 'Save changes' : 'Edit Profile'),
+)
   ],
 )
 
