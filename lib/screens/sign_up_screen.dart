@@ -81,7 +81,7 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
             TextButton(
               onPressed: () {},
               child: const Text(

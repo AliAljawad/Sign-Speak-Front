@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text(
           'Camera Translation',
           style: TextStyle(
-            fontSize: 30,
+            fontSize: 26,
             fontWeight: FontWeight.bold,
             
           ),
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Container(
               width: double.infinity,
-              height: 300,
+              height: 450,
               color: _isTranslating ? Colors.black : Colors.grey[300],
               child: _buildCameraPreview(),
             ),
