@@ -27,8 +27,12 @@ void _toggleEdit() {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
-      ),
+  title: const Text(
+    'Profile',
+    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+  ),
+  centerTitle: true,
+),
       body:Padding(
   padding: const EdgeInsets.all(20.0),
   child: Column(
