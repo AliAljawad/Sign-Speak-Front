@@ -21,9 +21,24 @@ final TextEditingController _passwordController =
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: const Center(
-        child: Text('Profile Page'),
-      ),
+      body: Column(
+  children: [
+    TextField(
+      controller: _nameController,
+      decoration: const InputDecoration(labelText: 'Name'),
+    ),
+    TextField(
+      controller: _emailController,
+      decoration: const InputDecoration(labelText: 'Email'),
+    ),
+    TextField(
+      controller: _passwordController,
+      decoration: const InputDecoration(labelText: 'Password'),
+      obscureText: true,
+    ),
+  ],
+)
+
     );
   }
 }
