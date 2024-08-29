@@ -34,15 +34,18 @@ void _toggleEdit() {
     TextField(
       controller: _nameController,
       decoration: const InputDecoration(labelText: 'Name'),
+      enabled: _isEditing,
     ),
     TextField(
       controller: _emailController,
       decoration: const InputDecoration(labelText: 'Email'),
+      enabled: _isEditing,
     ),
     TextField(
       controller: _passwordController,
       decoration: const InputDecoration(labelText: 'Password'),
       obscureText: true,
+      enabled: _isEditing,
     ),
     ElevatedButton(
   onPressed: _toggleEdit,
