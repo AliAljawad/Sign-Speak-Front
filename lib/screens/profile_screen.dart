@@ -61,6 +61,14 @@ void _toggleEdit() {
     ),
     ElevatedButton(
   onPressed: _toggleEdit,
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.blue,
+    padding: const EdgeInsets.symmetric(vertical: 15),
+    minimumSize: const Size(double.infinity, 0),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+  ),
   child: Text(_isEditing ? 'Save changes' : 'Edit Profile'),
 )
   ],
