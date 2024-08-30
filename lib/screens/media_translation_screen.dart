@@ -14,6 +14,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   XFile? _mediaFile;
   VideoPlayerController? _videoController;
 
+  // Method to pick media (image or video)
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
     showModalBottomSheet(
@@ -65,6 +66,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     super.dispose();
   }
 
+  // Widget to build the media preview
   Widget _buildMediaPreview() {
     if (_mediaFile == null) {
       return const Text(
@@ -131,7 +133,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-             
+                // Placeholder for translation functionality
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
