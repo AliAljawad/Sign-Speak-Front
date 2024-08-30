@@ -11,7 +11,7 @@ class SignUpPage extends StatelessWidget {
         title: const Text(
           'Sign up',
           style: TextStyle(
-            fontSize: 30, // Match the size of the login text
+            fontSize: 26, 
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -34,7 +34,7 @@ class SignUpPage extends StatelessWidget {
               child: Text(
                 'Create Account',
                 style: TextStyle(
-                   fontSize: 24,
+                   fontSize: 21,
                   fontWeight: FontWeight.bold,
                 ),
               ),
