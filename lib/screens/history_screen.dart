@@ -48,6 +48,11 @@ class HistoryPage extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
+                  if (entry['originalType'] == 'image')
+                    Image.network(entry['originalUrl'])
+                  else
+                    const SizedBox(height: 150),
+                  
                   const SizedBox(height: 10),
                   Text(
                     'Translated: ${entry['translatedText']}',
