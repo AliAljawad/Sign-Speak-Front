@@ -35,34 +35,34 @@ class HistoryPage extends StatelessWidget {
         itemCount: translationHistory.length,
         itemBuilder: (context, index) {
           final entry = translationHistory[index];
-         return Card(
-  margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-  child: Padding(
-    padding: const EdgeInsets.all(15.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          entry['date']!,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-        const SizedBox(height: 10),
-        if (entry['originalType'] == 'image')
-          Image.network(entry['originalUrl']!)
-        else if (entry['originalType'] == 'video')
-          VideoWidget(videoUrl: entry['originalUrl']!),
-        const SizedBox(height: 10),
-        Text(
-          'Translated: ${entry['translatedText']}',
-          style: const TextStyle(fontSize: 14),
-        ),
-      ],
-    ),
-  ),
-);
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    entry['date']!,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  if (entry['originalType'] == 'image')
+                    Image.network(entry['originalUrl']!)
+                  else if (entry['originalType'] == 'video')
+                    VideoWidget(videoUrl: entry['originalUrl']!),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Translated: ${entry['translatedText']}',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          );
         },
       ),
     );
@@ -84,7 +84,7 @@ class _VideoWidgetState extends State<VideoWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl)
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
       ..initialize().then((_) {
         setState(() {});
         _controller.play();
