@@ -65,6 +65,31 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     super.dispose();
   }
 
+  Widget _buildMediaPreview() {
+    if (_mediaFile == null) {
+      return const Text(
+        'No media selected',
+        style: TextStyle(fontSize: 16, color: Colors.black54),
+      );
+    }
+
+    if (_mediaFile!.path.endsWith('.mp4')) {
+      return _videoController != null && _videoController!.value.isInitialized
+          ? AspectRatio(
+              aspectRatio: _videoController!.value.aspectRatio,
+              child: VideoPlayer(_videoController!),
+            )
+          : const CircularProgressIndicator();
+    } else {
+      return Image.file(
+        File(_mediaFile!.path),
+        fit: BoxFit.fill,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,24 +106,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
               height: 200,
               color: Colors.grey[300],
               child: Center(
-                child: _mediaFile == null
-                    ? const Text(
-                        'No media selected',
-                        style: TextStyle(fontSize: 16, color: Colors.black54),
-                      )
-                    : _mediaFile!.path.endsWith('.mp4')
-                        ? _videoController != null && _videoController!.value.isInitialized
-                            ? AspectRatio(
-                                aspectRatio: _videoController!.value.aspectRatio,
-                                child: VideoPlayer(_videoController!),
-                              )
-                            : const CircularProgressIndicator()
-                        : Image.file(
-                            File(_mediaFile!.path),
-                            fit: BoxFit.fill,  
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
+                child: _buildMediaPreview(),
               ),
             ),
             const SizedBox(height: 20),
@@ -123,7 +131,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                
+             
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
