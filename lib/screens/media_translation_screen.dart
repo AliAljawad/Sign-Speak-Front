@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MediaTranslationPage extends StatefulWidget {
   const MediaTranslationPage({super.key});
@@ -8,6 +10,17 @@ class MediaTranslationPage extends StatefulWidget {
 }
 
 class _MediaTranslationPageState extends State<MediaTranslationPage> {
+  XFile? _mediaFile;
+
+  Future<void> _pickMedia() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    
+    setState(() {
+      _mediaFile = pickedFile;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,11 +36,18 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
               width: double.infinity,
               height: 200,
               color: Colors.grey[300],
-              child: const Center(
-                child: Text(
-                  'Media Preview',
-                  style: TextStyle(fontSize: 16, color: Colors.black54),
-                ),
+              child: Center(
+                child: _mediaFile == null
+                    ? const Text(
+                        'Media Preview',
+                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                      )
+                    : Image.file(
+                        File(_mediaFile!.path),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
               ),
             ),
             const SizedBox(height: 20),
@@ -38,7 +58,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: _pickMedia,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 15),
