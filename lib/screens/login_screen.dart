@@ -34,7 +34,7 @@ class LoginPage extends StatelessWidget {
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Log in',
+                'Login',
                 style: TextStyle(
                   fontSize: 21,
                   fontWeight: FontWeight.bold,
@@ -64,9 +64,9 @@ class LoginPage extends StatelessWidget {
               child: TextButton(
                 onPressed: () {},
                 child: const Text(
-                  'Forget password?',
+                  'Forgot password?',
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -80,7 +80,7 @@ class LoginPage extends StatelessWidget {
                 minimumSize: const Size(double.infinity, 0),
               ),
               child: const Text(
-                'Log in',
+                'Login',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -91,7 +91,7 @@ class LoginPage extends StatelessWidget {
             TextButton(
               onPressed: () {},
               child: const Text(
-                "Don't have an account? Sign up",
+                "Don't have an account? Sign Up",
                 style: TextStyle(
                   color: Colors.blue,
                 ),
