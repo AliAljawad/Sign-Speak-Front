@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sign_speak/screens/media_translation_screen.dart';
 import 'package:sign_speak/widgets/bottom_navigation_bar.dart';
 import 'package:camera/camera.dart';
 
@@ -16,9 +17,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return  const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyBottomNavigationBar(camera: camera), 
+      home: MediaTranslationPage(), 
     );
     }
 }
