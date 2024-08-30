@@ -89,14 +89,28 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             TextButton(
-              onPressed: () {},
-              child: const Text(
-                "Don't have an account? Sign Up",
-                style: TextStyle(
-                  color: Colors.blue,
-                ),
-              ),
-            ),
+  onPressed: () {},
+  child: RichText(
+    text: const TextSpan(
+      children: [
+         TextSpan(
+          text: "Don't have an account? ",
+          style: TextStyle(
+            color: Colors.black, 
+          ),
+        ),
+        TextSpan(
+          text: "Sign Up",
+          style: TextStyle(
+            color: Colors.blue,
+            fontWeight: FontWeight.bold, 
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
           ],
         ),
       ),
