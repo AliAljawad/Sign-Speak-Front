@@ -95,7 +95,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
                             : const CircularProgressIndicator()
                         : Image.file(
                             File(_mediaFile!.path),
-                            fit: BoxFit.fill,
+                            fit: BoxFit.fill,  
                             width: double.infinity,
                             height: double.infinity,
                           ),
@@ -123,7 +123,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Placeholder for translation functionality
+                
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
