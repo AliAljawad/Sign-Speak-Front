@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_player/video_player.dart';
 
 class MediaTranslationPage extends StatefulWidget {
   const MediaTranslationPage({super.key});
@@ -11,14 +12,57 @@ class MediaTranslationPage extends StatefulWidget {
 
 class _MediaTranslationPageState extends State<MediaTranslationPage> {
   XFile? _mediaFile;
+  VideoPlayerController? _videoController;
 
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    
-    setState(() {
-      _mediaFile = pickedFile;
-    });
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo),
+                title: const Text('Pick Image'),
+                onTap: () async {
+                  final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                  setState(() {
+                    _mediaFile = pickedFile;
+                    _videoController = null;
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.videocam),
+                title: const Text('Pick Video'),
+                onTap: () async {
+                  final XFile? pickedFile = await picker.pickVideo(source: ImageSource.gallery);
+                  if (pickedFile != null) {
+                    _videoController = VideoPlayerController.file(File(pickedFile.path))
+                      ..initialize().then((_) {
+                        setState(() {});
+                        _videoController!.play();
+                      });
+                    setState(() {
+                      _mediaFile = pickedFile;
+                    });
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _videoController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -42,12 +86,19 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
                         'Media Preview',
                         style: TextStyle(fontSize: 16, color: Colors.black54),
                       )
-                    : Image.file(
-                        File(_mediaFile!.path),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
+                    : _mediaFile!.path.endsWith('.mp4')
+                        ? _videoController != null && _videoController!.value.isInitialized
+                            ? AspectRatio(
+                                aspectRatio: _videoController!.value.aspectRatio,
+                                child: VideoPlayer(_videoController!),
+                              )
+                            : const CircularProgressIndicator()
+                        : Image.file(
+                            File(_mediaFile!.path),
+                            fit: BoxFit.fill,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
               ),
             ),
             const SizedBox(height: 20),
@@ -71,7 +122,9 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // Placeholder for translation functionality
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 15),
