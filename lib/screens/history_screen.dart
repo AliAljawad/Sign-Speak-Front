@@ -27,10 +27,16 @@ class HistoryPage extends StatelessWidget {
   },
 ];
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Translation History'),
-      ),
-      body: Container(),
-    );
-  }
+    appBar: AppBar(
+      title: const Text('Translation History'),
+    ),
+    body: ListView.builder(
+      itemCount: translationHistory.length,
+      itemBuilder: (context, index) {
+        final entry = translationHistory[index];
+        return Container(); 
+      },
+    ),
+  );
+}
 }
