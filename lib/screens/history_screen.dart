@@ -51,6 +51,8 @@ class HistoryPage extends StatelessWidget {
                   ),
                   if (entry['originalType'] == 'image')
                     Image.network(entry['originalUrl'])
+                  else if (entry['originalType'] == 'video') 
+                    VideoWidget(videoUrl: entry['originalUrl']!)
                   else
                     const SizedBox(height: 150),
                   
