@@ -9,7 +9,7 @@ class SignUpPage extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          'Sign up',
+          'Sign Up',
           style: TextStyle(
             fontSize: 26, 
             fontWeight: FontWeight.bold,
@@ -84,10 +84,23 @@ class SignUpPage extends StatelessWidget {
             const SizedBox(height: 5),
             TextButton(
               onPressed: () {},
-              child: const Text(
-                "Already have an account? Log in",
-                style: TextStyle(
-                  color: Colors.blue,
+              child: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Already have an account? ",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "Login",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
