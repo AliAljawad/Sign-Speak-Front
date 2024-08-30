@@ -14,7 +14,6 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   XFile? _mediaFile;
   VideoPlayerController? _videoController;
 
-  // Method to pick media (image or video)
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
     showModalBottomSheet(
@@ -83,12 +82,19 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
             )
           : const CircularProgressIndicator();
     } else {
-      return Image.file(
-        File(_mediaFile!.path),
-        fit: BoxFit.fill,
-        width: double.infinity,
-        height: double.infinity,
-      );
+      try {
+        return Image.file(
+          File(_mediaFile!.path),
+          fit: BoxFit.fill,
+          width: double.infinity,
+          height: double.infinity,
+        );
+      } catch (e) {
+        return const Text(
+          'Error loading image',
+          style: TextStyle(fontSize: 16, color: Colors.red),
+        );
+      }
     }
   }
 
