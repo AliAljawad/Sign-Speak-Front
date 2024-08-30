@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
@@ -90,7 +90,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
             TextButton(
   onPressed: () {},
   child: RichText(
