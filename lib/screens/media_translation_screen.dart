@@ -83,7 +83,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
               child: Center(
                 child: _mediaFile == null
                     ? const Text(
-                        'Media Preview',
+                        'No media selected',
                         style: TextStyle(fontSize: 16, color: Colors.black54),
                       )
                     : _mediaFile!.path.endsWith('.mp4')
