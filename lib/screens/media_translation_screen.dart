@@ -102,7 +102,9 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Translate your media'),
+        title: const Text('Translate your media',
+            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
