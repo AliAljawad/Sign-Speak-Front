@@ -11,7 +11,7 @@ class LoginPage extends StatelessWidget {
         title: const Text(
           'Login',
           style: TextStyle(
-            fontSize: 30,
+            fontSize: 26,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -36,7 +36,7 @@ class LoginPage extends StatelessWidget {
               child: Text(
                 'Log in',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 21,
                   fontWeight: FontWeight.bold,
                 ),
               ),
