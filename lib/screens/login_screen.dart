@@ -11,10 +11,12 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
+  String? _errorMessage;
 
   Future<void> _login() async {
     setState(() {
       _isLoading = true;
+      _errorMessage = null;
     });
 
     try {
@@ -32,20 +34,14 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       } else {
-        // Show error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login failed! Please check your credentials.'),
-          ),
-        );
+        setState(() {
+          _errorMessage = 'Login failed! Please check your credentials.';
+        });
       }
     } catch (e) {
-      // Handle exceptions
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('An error occurred: $e'),
-        ),
-      );
+      setState(() {
+        _errorMessage = 'An error occurred: $e';
+      });
     } finally {
       setState(() {
         _isLoading = false;
@@ -92,6 +88,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 20),
+            if (_errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Text(
+                  _errorMessage!,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(
