@@ -196,7 +196,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           _errorMessage!,
                           style: const TextStyle(color: Colors.red),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                 );
               },
             ),
