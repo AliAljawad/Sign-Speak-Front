@@ -5,27 +5,33 @@ import 'package:sign_speak/screens/home_screen.dart';
 import 'package:sign_speak/screens/profile_screen.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
-  final CameraDescription camera;
-
-  const MyBottomNavigationBar({super.key, required this.camera});
+  const MyBottomNavigationBar({super.key});
 
   @override
   State<MyBottomNavigationBar> createState() => _MyBottomNavigationBarState();
 }
 
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
-    int _selectedIndex = 0;
-
-  late List<Widget> _pages;
+  int _selectedIndex = 0;
+  List<Widget>? _pages;
+  CameraDescription? _camera;
 
   @override
   void initState() {
     super.initState();
-    _pages = [
-      HomePage(camera: widget.camera),
-      const HistoryPage(),
-      const ProfilePage(),
-    ];
+    _initializeCamera();
+  }
+
+  Future<void> _initializeCamera() async {
+    final cameras = await availableCameras();
+    setState(() {
+      _camera = cameras.first;
+      _pages = [
+        HomePage(camera: _camera!),
+        const HistoryPage(),
+        const ProfilePage(),
+      ];
+    });
   }
 
   void _onItemTapped(int index) {
@@ -37,7 +43,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: _pages == null
+          ? const Center(child: CircularProgressIndicator())
+          : _pages![_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
