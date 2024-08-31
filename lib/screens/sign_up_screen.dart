@@ -101,13 +101,20 @@ final TextEditingController _confirmPasswordController =
               ),
             ),
             const SizedBox(height: 20),
-            const TextField(
-              decoration: InputDecoration(
-                labelText: 'Name',
-                prefixIcon: Icon(Icons.email),
-                border: OutlineInputBorder(),
-              ),
-            ),
+            TextFormField(
+  controller: _nameController,
+  decoration: const InputDecoration(
+    labelText: 'Name',
+    prefixIcon: Icon(Icons.person),
+    border: OutlineInputBorder(),
+  ),
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your name';
+    }
+    return null;
+  },
+),
             const SizedBox(height: 10),
             const TextField(
               decoration: InputDecoration(
