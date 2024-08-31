@@ -15,6 +15,8 @@ final TextEditingController _emailController = TextEditingController();
 final TextEditingController _passwordController = TextEditingController();
 final TextEditingController _confirmPasswordController =
     TextEditingController();
+    String? _selectedUserType;
+  final List<String> _userTypes = ['regular', 'non-verbal'];
   void _registerUser() async {
   if (_formKey.currentState!.validate()) {
     if (_selectedUserType == null) {
