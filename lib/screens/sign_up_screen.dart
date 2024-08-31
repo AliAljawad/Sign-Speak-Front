@@ -1,6 +1,6 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -10,13 +10,15 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-final TextEditingController _emailController = TextEditingController();
-final TextEditingController _passwordController = TextEditingController();
-final TextEditingController _confirmPasswordController =
-    TextEditingController();
-    String? _selectedUserType;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  String? _selectedUserType;
   final List<String> _userTypes = ['regular', 'non-verbal'];
+
   void _registerUser() async {
   if (_formKey.currentState!.validate()) {
     if (_selectedUserType == null) {
@@ -65,7 +67,6 @@ final TextEditingController _confirmPasswordController =
 }
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +75,7 @@ final TextEditingController _confirmPasswordController =
         title: const Text(
           'Sign Up',
           style: TextStyle(
-            fontSize: 26, 
+            fontSize: 26,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -84,41 +85,43 @@ final TextEditingController _confirmPasswordController =
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/logo.png', // Update with the correct path to your logo image
-              height: 150,
-            ),
-            const SizedBox(height: 20),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Create Account',
-                style: TextStyle(
-                   fontSize: 21,
-                  fontWeight: FontWeight.bold,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/logo.png', // Update with the correct path to your logo image
+                height: 150,
+              ),
+              const SizedBox(height: 20),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Create Account',
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-  controller: _nameController,
-  decoration: const InputDecoration(
-    labelText: 'Name',
-    prefixIcon: Icon(Icons.person),
-    border: OutlineInputBorder(),
-  ),
-  validator: (value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your name';
-    }
-    return null;
-  },
-),
-            const SizedBox(height: 10),
-             TextFormField(
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: 'Email',
@@ -134,8 +137,8 @@ final TextEditingController _confirmPasswordController =
                   return null;
                 },
               ),
-            const SizedBox(height: 10),
-            TextFormField(
+              const SizedBox(height: 10),
+              TextFormField(
                 controller: _passwordController,
                 obscureText: true,
                 decoration: const InputDecoration(
@@ -152,8 +155,8 @@ final TextEditingController _confirmPasswordController =
                   return null;
                 },
               ),
-            const SizedBox(height: 10),
-            TextFormField(
+              const SizedBox(height: 10),
+              TextFormField(
                 controller: _confirmPasswordController,
                 obscureText: true,
                 decoration: const InputDecoration(
@@ -170,30 +173,31 @@ final TextEditingController _confirmPasswordController =
                   return null;
                 },
               ),
-            DropdownButtonFormField<String>(
-  value: _selectedUserType,
-  hint: const Text('Select User Type'),
-  items: _userTypes.map((type) {
-    return DropdownMenuItem<String>(
-      value: type,
-      child: Text(type),
-    );
-  }).toList(),
-  onChanged: (value) {
-    setState(() {
-      _selectedUserType = value;
-      print('Selected user type: $_selectedUserType'); // Debugging line
-    });
-  },
-  decoration: const InputDecoration(
-    labelText: 'User Type',
-    prefixIcon: Icon(Icons.person),
-    border: OutlineInputBorder(),
-  ),
-),
-
-            const SizedBox(height: 20),
-            ElevatedButton(
+              const SizedBox(height: 10),
+              DropdownButtonFormField<String>(
+                value: _selectedUserType,
+                hint: const Text('Select User Type'),
+                items: _userTypes.map((type) {
+                  return DropdownMenuItem<String>(
+                    value: type,
+                    child: Text(type),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedUserType = value;
+                    print(
+                        'Selected user type: $_selectedUserType'); // Debugging line
+                  });
+                },
+                decoration: const InputDecoration(
+                  labelText: 'User Type',
+                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
                 onPressed: _registerUser,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -211,30 +215,33 @@ final TextEditingController _confirmPasswordController =
                   ),
                 ),
               ),
-            const SizedBox(height: 5),
-            TextButton(
-              onPressed: () {},
-              child: RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "Already have an account? ",
-                      style: TextStyle(
-                        color: Colors.black,
+              const SizedBox(height: 5),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Go back to the login screen
+                },
+                child: RichText(
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Already have an account? ",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: "Login",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                      TextSpan(
+                        text: "Login",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
