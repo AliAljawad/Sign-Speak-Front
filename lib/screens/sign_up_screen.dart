@@ -134,6 +134,28 @@ final TextEditingController _confirmPasswordController =
                 border: OutlineInputBorder(),
               ),
             ),
+            DropdownButtonFormField<String>(
+  value: _selectedUserType,
+  hint: const Text('Select User Type'),
+  items: _userTypes.map((type) {
+    return DropdownMenuItem<String>(
+      value: type,
+      child: Text(type),
+    );
+  }).toList(),
+  onChanged: (value) {
+    setState(() {
+      _selectedUserType = value;
+      print('Selected user type: $_selectedUserType'); // Debugging line
+    });
+  },
+  decoration: const InputDecoration(
+    labelText: 'User Type',
+    prefixIcon: Icon(Icons.person),
+    border: OutlineInputBorder(),
+  ),
+),
+
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {},
