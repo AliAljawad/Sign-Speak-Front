@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:sign_speak/screens/history_screen.dart';
 import 'package:sign_speak/screens/home_screen.dart';
 import 'package:sign_speak/screens/profile_screen.dart';
+import 'package:sign_speak/services/camera_sevice.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
   const MyBottomNavigationBar({super.key});
@@ -23,9 +24,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   }
 
   Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
+    final cameraService = CameraService();
+    _camera = await cameraService.initializeCamera();
     setState(() {
-      _camera = cameras.first;
       _pages = [
         HomePage(camera: _camera!),
         const HistoryPage(),
