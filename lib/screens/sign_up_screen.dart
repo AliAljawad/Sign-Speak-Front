@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -13,6 +15,53 @@ final TextEditingController _emailController = TextEditingController();
 final TextEditingController _passwordController = TextEditingController();
 final TextEditingController _confirmPasswordController =
     TextEditingController();
+  void _registerUser() async {
+  if (_formKey.currentState!.validate()) {
+    if (_selectedUserType == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a user type')),
+      );
+      return;
+    }
+
+    final requestBody = jsonEncode(<String, String>{
+      'name': _nameController.text,
+      'email': _emailController.text,
+      'password': _passwordController.text,
+      'user_type': _selectedUserType!,
+    });
+
+    print('Request Body: $requestBody'); // Debugging line
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8000/api/register'), // Replace with your API endpoint
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: requestBody,
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('User registered successfully!')),
+        );
+        // Navigate to another page if needed
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration failed')),
+        );
+      }
+    } catch (e) {
+      // Handle other exceptions, such as network errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registration failed')),
+      );
+    }
+  }
+}
+
 
 
   @override
