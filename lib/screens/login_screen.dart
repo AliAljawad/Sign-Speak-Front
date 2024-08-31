@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -7,46 +9,87 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
+  late AnimationController _animationController;
+  late Animation<double> _shakeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _shakeAnimation = Tween<double>(begin: 0, end: 10).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticIn),
+    );
+  }
 
   Future<void> _login() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please enter both email and password.';
+      });
+      _triggerShakeAnimation();
+      return; // Exit the function early
+    }
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
 
     try {
-      // Simulate a network call
-      await Future.delayed(const Duration(seconds: 2));
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8000/api/login'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        }),
+      );
 
-      // Simulate success/failure
-      bool loginSuccess = true; // change this to `false` to simulate failure
-
-      if (loginSuccess) {
-        // Navigate to home or show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login successful!'),
-          ),
-        );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print('Login successful: ${data}');
       } else {
-        setState(() {
-          _errorMessage = 'Login failed! Please check your credentials.';
-        });
+        if (response.headers['content-type']?.contains('application/json') ?? false) {
+          setState(() {
+            _errorMessage =  'Login failed';
+          });
+        } else {
+          setState(() {
+            _errorMessage = 'Unexpected error occurred. Response not in JSON format.';
+          });
+        }
+        _triggerShakeAnimation();
       }
     } catch (e) {
       setState(() {
         _errorMessage = 'An error occurred: $e';
       });
+      _triggerShakeAnimation();
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  void _triggerShakeAnimation() {
+    _animationController.forward(from: 0).then((_) => _animationController.reverse());
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -88,17 +131,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 20),
-            if (_errorMessage != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Text(
-                  _errorMessage!,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(
@@ -154,6 +186,20 @@ class _LoginPageState extends State<LoginPage> {
                     ),
             ),
             const SizedBox(height: 5),
+            AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(_shakeAnimation.value, 0),
+                  child: _errorMessage != null
+                      ? Text(
+                          _errorMessage!,
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      : SizedBox.shrink(),
+                );
+              },
+            ),
             TextButton(
               onPressed: () {},
               child: RichText(
