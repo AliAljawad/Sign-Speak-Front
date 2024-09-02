@@ -62,40 +62,41 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     );
   }
   Future<void> _translateMedia() async {
-    if (_mediaFile == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No media file selected')),
-      );
-      return;
-    }
-
-    final uri = Uri.parse(_mediaFile!.path.endsWith('.mp4')
-        ? 'http://10.0.2.2:8001/predict_video' 
-        : 'http://10.0.2.2:8001/predict_image'); 
-
-    final request = http.MultipartRequest('POST', uri)
-      ..files.add(await http.MultipartFile.fromPath('file', _mediaFile!.path));
-
-    try {
-      final response = await request.send();
-
-      if (response.statusCode == 200) {
-        final responseData = await response.stream.bytesToString();
-        final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
-        print(decodedResponse);
-
-        setState(() {
-          _translation = decodedResponse['Translation'].toString();
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to get a response from the server')),
-        );
-      }
-    } catch (e) {
-        print('Error: $e');
-    }
+  if (_mediaFile == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('No media file selected')),
+    );
+    return;
   }
+
+  final uri = Uri.parse(_mediaFile!.path.endsWith('.mp4')
+      ? 'http://10.0.2.2:8001/predict_video' // API for video
+      : 'http://10.0.2.2:8001/predict_image'); // API for image
+
+  final request = http.MultipartRequest('POST', uri)
+    ..files.add(await http.MultipartFile.fromPath('file', _mediaFile!.path));
+
+  try {
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.bytesToString();
+      final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
+      print(decodedResponse);
+
+      setState(() {
+        _translation = decodedResponse['Translation'].toString();
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to get a response from the server')),
+      );
+    }
+  } catch (e) {
+      print('Error: $e');
+  }
+}
+
 
   @override
   void dispose() {
