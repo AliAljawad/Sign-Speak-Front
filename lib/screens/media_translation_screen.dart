@@ -76,25 +76,28 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   final request = http.MultipartRequest('POST', uri)
     ..files.add(await http.MultipartFile.fromPath('file', _mediaFile!.path));
 
-  try {
-    final response = await request.send();
+ try {
+  final response = await request.send();
 
-    if (response.statusCode == 200) {
-      final responseData = await response.stream.bytesToString();
-      final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
-      print(decodedResponse);
+  if (response.statusCode == 200) {
+    final responseData = await response.stream.bytesToString();
+    final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
+    print(decodedResponse);
 
-      setState(() {
-        _translation = decodedResponse['Translation'].toString();
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to get a response from the server')),
-      );
-    }
-  } catch (e) {
-      print('Error: $e');
+    setState(() {
+      _translation = decodedResponse['Translation'].toString();
+    });
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Failed to get a response from the server')),
+    );
   }
+} catch (e) {
+  print('Error: $e');
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('An error occurred: $e')),
+  );
+}
 }
 
 
