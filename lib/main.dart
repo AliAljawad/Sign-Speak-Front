@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sign_speak/screens/media_translation_screen.dart';
 import 'package:sign_speak/screens/sign_up_screen.dart';
 import 'package:sign_speak/widgets/bottom_navigation_bar.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignUpPage(),
+      home: MediaTranslationPage(),
     );
   }
 }
