@@ -1,10 +1,9 @@
-import 'dart:convert';
+import 'dart:convert'; 
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
-import 'package:http/http.dart' as http; // Added this line
-
+import 'package:http/http.dart' as http;
 
 class MediaTranslationPage extends StatefulWidget {
   const MediaTranslationPage({super.key});
@@ -16,7 +15,7 @@ class MediaTranslationPage extends StatefulWidget {
 class _MediaTranslationPageState extends State<MediaTranslationPage> {
   XFile? _mediaFile;
   VideoPlayerController? _videoController;
-    String _translation = '';
+  String _translation = ''; 
 
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
@@ -62,45 +61,45 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       },
     );
   }
+
   Future<void> _translateMedia() async {
-  if (_mediaFile == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('No media file selected')),
-    );
-    return;
+    if (_mediaFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No media file selected')),
+      );
+      return;
+    }
+
+    final uri = Uri.parse(_mediaFile!.path.endsWith('.mp4')
+        ? 'http://10.0.2.2:8001/predict_video' // API for video
+        : 'http://10.0.2.2:8001/predict_image'); // API for image
+
+    final request = http.MultipartRequest('POST', uri)
+      ..files.add(await http.MultipartFile.fromPath('file', _mediaFile!.path));
+
+    try {
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        final responseData = await response.stream.bytesToString();
+        final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
+        print(decodedResponse);
+
+        setState(() {
+          _translation = decodedResponse['Translation'].toString();
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to get a response from the server')),
+        );
+      }
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
   }
-
-  final uri = Uri.parse(_mediaFile!.path.endsWith('.mp4')
-      ? 'http://10.0.2.2:8001/predict_video' // API for video
-      : 'http://10.0.2.2:8001/predict_image'); // API for image
-
-  final request = http.MultipartRequest('POST', uri)
-    ..files.add(await http.MultipartFile.fromPath('file', _mediaFile!.path));
-
- try {
-  final response = await request.send();
-
-  if (response.statusCode == 200) {
-    final responseData = await response.stream.bytesToString();
-    final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
-    print(decodedResponse);
-
-    setState(() {
-      _translation = decodedResponse['Translation'].toString();
-    });
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Failed to get a response from the server')),
-    );
-  }
-} catch (e) {
-  print('Error: $e');
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('An error occurred: $e')),
-  );
-}
-}
-
 
   @override
   void dispose() {
@@ -108,7 +107,6 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     super.dispose();
   }
 
-  // Widget to build the media preview
   Widget _buildMediaPreview() {
     if (_mediaFile == null) {
       return const Text(
@@ -126,13 +124,12 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
           : const CircularProgressIndicator();
     } else {
       try {
-       return Image.file(
-  File(_mediaFile!.path),
-  fit: BoxFit.cover, // Changed this line
-  width: double.infinity,
-  height: double.infinity,
-);
-
+        return Image.file(
+          File(_mediaFile!.path),
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+        );
       } catch (e) {
         return const Text(
           'Error loading image',
@@ -143,69 +140,69 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text('Translate your media',
-          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-      centerTitle: true,
-    ),
-    body: Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            height: 200,
-            color: Colors.grey[300],
-            child: Center(
-              child: _buildMediaPreview(),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            _translation.isNotEmpty
-                ? _translation
-                : 'This is the translation of the picture or video you have uploaded',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16),
-          ), // Modified this line
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _pickMedia,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              minimumSize: const Size(double.infinity, 0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Translate your media',
+            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              height: 200,
+              color: Colors.grey[300],
+              child: Center(
+                child: _buildMediaPreview(),
               ),
             ),
-            child: const Text(
-              'Upload Image or Video',
-              style: TextStyle(color: Colors.white, fontSize: 16),
+            const SizedBox(height: 20),
+            Text(
+              _translation.isNotEmpty
+                  ? _translation
+                  : 'This is the translation of the picture or video you have uploaded',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16),
+            ), 
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _pickMedia,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                minimumSize: const Size(double.infinity, 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Upload Image or Video',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-  onPressed: _translateMedia, // Changed from placeholder to the actual method
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.blue,
-    padding: const EdgeInsets.symmetric(vertical: 15),
-    minimumSize: const Size(double.infinity, 0),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-    ),
-  ),
-  child: const Text(
-    'Translate',
-    style: TextStyle(color: Colors.white, fontSize: 16),
-  ),
-),
-        ],
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _translateMedia, 
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                minimumSize: const Size(double.infinity, 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Translate',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
