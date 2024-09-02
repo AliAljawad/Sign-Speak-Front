@@ -15,6 +15,7 @@ class MediaTranslationPage extends StatefulWidget {
 class _MediaTranslationPageState extends State<MediaTranslationPage> {
   XFile? _mediaFile;
   VideoPlayerController? _videoController;
+    String _translation = '';
 
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
