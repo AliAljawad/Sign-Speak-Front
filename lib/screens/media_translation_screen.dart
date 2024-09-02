@@ -83,7 +83,6 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       if (response.statusCode == 200) {
         final responseData = await response.stream.bytesToString();
         final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
-        print(decodedResponse);
 
         setState(() {
           _translation = decodedResponse['Translation'].toString();
@@ -94,7 +93,6 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
         );
       }
     } catch (e) {
-      print('Error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('An error occurred: $e')),
       );
