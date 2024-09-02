@@ -126,12 +126,13 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
           : const CircularProgressIndicator();
     } else {
       try {
-        return Image.file(
-          File(_mediaFile!.path),
-          fit: BoxFit.fill,
-          width: double.infinity,
-          height: double.infinity,
-        );
+       return Image.file(
+  File(_mediaFile!.path),
+  fit: BoxFit.cover, // Changed this line
+  width: double.infinity,
+  height: double.infinity,
+);
+
       } catch (e) {
         return const Text(
           'Error loading image',
