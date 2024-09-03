@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             ),
             const SizedBox(height: 10),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: Alignment.centerLeft,
               child: TextButton(
                 onPressed: () {},
                 child: const Text(
