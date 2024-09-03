@@ -94,17 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 'assets/images/logo.png', // Update with the correct path to your logo image
                 height: 150,
               ),
-              const SizedBox(height: 20),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Create Account',
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+             
               const SizedBox(height: 20),
               TextFormField(
                 controller: _nameController,
