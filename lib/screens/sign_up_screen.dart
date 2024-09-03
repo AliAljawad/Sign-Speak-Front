@@ -91,10 +91,9 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/logo.png', // Update with the correct path to your logo image
+                'assets/images/logo.png', 
                 height: 150,
               ),
-             
               const SizedBox(height: 20),
               TextFormField(
                 controller: _nameController,
