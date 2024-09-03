@@ -112,6 +112,8 @@ class ProfilePageState extends State<ProfilePage> {
                 // Handle logout
               },
               style: ElevatedButton.styleFrom(
+        
+                minimumSize: const Size(double.infinity, 0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
                       8),
