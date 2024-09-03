@@ -106,6 +106,20 @@ class ProfilePageState extends State<ProfilePage> {
               child: Text(_isEditing ? 'Save changes' : 'Edit Profile',
                   style: const TextStyle(color: Colors.white, fontSize: 16)),
             ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Handle logout
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      8),
+                ),
+              ),
+              child: Text('Logout',
+                  style: const TextStyle(color: Colors.white, fontSize: 16)),
+            ),
           ],
         ),
       ),
