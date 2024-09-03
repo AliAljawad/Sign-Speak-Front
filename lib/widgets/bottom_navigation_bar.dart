@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 import 'package:sign_speak/screens/history_screen.dart';
-import 'package:sign_speak/screens/home_screen.dart';
+import 'package:sign_speak/screens/live_translation_screen.dart';
 import 'package:sign_speak/screens/profile_screen.dart';
-import 'package:sign_speak/services/camera_sevice.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
   const MyBottomNavigationBar({super.key});
@@ -15,7 +13,6 @@ class MyBottomNavigationBar extends StatefulWidget {
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   int _selectedIndex = 0;
   List<Widget>? _pages;
-  CameraDescription? _camera;
 
   @override
   void initState() {
@@ -24,11 +21,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   }
 
   Future<void> _initializeCamera() async {
-    final cameraService = CameraService();
-    _camera = await cameraService.initializeCamera();
     setState(() {
       _pages = [
-        HomePage(camera: _camera!),
+        LiveTranslationScreen(),
         const HistoryPage(),
         const ProfilePage(),
       ];
