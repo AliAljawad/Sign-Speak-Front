@@ -5,6 +5,8 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class LiveTranslationScreen extends StatefulWidget {
+  const LiveTranslationScreen({super.key});
+
   @override
   _LiveTranslationScreenState createState() => _LiveTranslationScreenState();
 }
@@ -72,7 +74,7 @@ void _captureAndSendFrame() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Live Translation'),
+        title: const Text('Live Translation'),
       ),
       body: Column(
         children: [
@@ -82,7 +84,7 @@ void _captureAndSendFrame() async {
             color: _isTranslating ? Colors.black : Colors.grey[300],
             child: _isCameraInitialized
                 ? CameraPreview(_controller!)
-                : Center(
+                : const Center(
                     child: CircularProgressIndicator(),
                   ),
           ),
@@ -107,7 +109,7 @@ void _captureAndSendFrame() async {
           const SizedBox(height: 20),
           Text(
             'Translation: $_translation',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ],
       ),
