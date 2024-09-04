@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sign_speak/screens/sign_up_screen.dart';
 import 'package:sign_speak/widgets/bottom_navigation_bar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -177,7 +178,9 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 5),
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context); // Navigate back to the signup screen
+                  Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const SignUpPage()),
+);
                 },
                 child: RichText(
                   text: const TextSpan(
