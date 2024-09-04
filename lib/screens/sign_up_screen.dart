@@ -203,7 +203,9 @@ class _SignUpPageState extends State<SignUpPage> {
               const SizedBox(height: 5),
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context); // Go back to the login screen
+                  Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+);
                 },
                 child: RichText(
                   text: const TextSpan(
