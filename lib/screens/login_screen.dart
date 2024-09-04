@@ -1,4 +1,4 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -10,7 +10,8 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
@@ -18,7 +19,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   late AnimationController _animationController;
   late Animation<double> _shakeAnimation;
   final _storage = const FlutterSecureStorage();
-
 
   @override
   void initState() {
@@ -64,15 +64,18 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         await _storage.write(key: 'jwt_token', value: token);
         print('Login successful: ${data['authorisation']['token']}');
       } else {
-        if (response.headers['content-type']?.contains('application/json') ?? false) {
+        if (response.headers['content-type']?.contains('application/json') ??
+            false) {
           setState(() {
-            _errorMessage =  'Login failed';
+            _errorMessage = 'Login failed';
           });
         } else {
           setState(() {
-            _errorMessage = 'Unexpected error occurred. Response not in JSON format.';
+            _errorMessage =
+                'Unexpected error occurred. Response not in JSON format.';
           });
         }
+
         _triggerShakeAnimation();
       }
     } catch (e) {
@@ -88,7 +91,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   }
 
   void _triggerShakeAnimation() {
-    _animationController.forward(from: 0).then((_) => _animationController.reverse());
+    _animationController
+        .forward(from: 0)
+        .then((_) => _animationController.reverse());
   }
 
   @override
