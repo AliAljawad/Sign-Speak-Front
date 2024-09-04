@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sign_speak/screens/live_translation_screen.dart';
-import 'package:sign_speak/screens/media_translation_screen.dart';
-import 'package:sign_speak/screens/sign_up_screen.dart';
-import 'package:sign_speak/widgets/bottom_navigation_bar.dart';
 import 'package:sign_speak/screens/login_screen.dart';
+import 'package:sign_speak/widgets/bottom_navigation_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,9 +11,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: FutureBuilder<bool>(
+        future: _checkToken(context),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Center(child: Text('An error occurred'));
+          }
+          return snapshot.data == true
+              ? const MyBottomNavigationBar()
+              : const LoginPage();
+        },
+      ),
     );
   }
 }
