@@ -35,8 +35,6 @@ class _SignUpPageState extends State<SignUpPage> {
       'user_type': _selectedUserType!,
     });
 
-    print('Request Body: $requestBody'); // Debugging line
-
     try {
       final response = await http.post(
         Uri.parse('http://10.0.2.2:8000/api/register'), // Replace with your API endpoint
