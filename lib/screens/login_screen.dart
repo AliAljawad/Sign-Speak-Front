@@ -60,6 +60,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        final token = data['authorisation']['token'];
+        await _storage.write(key: 'jwt_token', value: token);
         print('Login successful: ${data['authorisation']['token']}');
       } else {
         if (response.headers['content-type']?.contains('application/json') ?? false) {
