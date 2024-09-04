@@ -17,6 +17,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   String? _errorMessage;
   late AnimationController _animationController;
   late Animation<double> _shakeAnimation;
+  final _storage = const FlutterSecureStorage();
+
 
   @override
   void initState() {
