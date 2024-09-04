@@ -37,7 +37,6 @@ class _LoginPageState extends State<LoginPage>
       setState(() {
         _errorMessage = 'Please enter both email and password.';
       });
-      _triggerShakeAnimation();
       return; // Exit the function early
     }
 
@@ -79,13 +78,11 @@ class _LoginPageState extends State<LoginPage>
                 'Unexpected error occurred. Response not in JSON format.';
           });
         }
-        _triggerShakeAnimation();
       }
     } catch (e) {
       setState(() {
         _errorMessage = 'An error occurred: $e';
       });
-      _triggerShakeAnimation();
     } finally {
       setState(() {
         _isLoading = false;
@@ -93,11 +90,7 @@ class _LoginPageState extends State<LoginPage>
     }
   }
 
-  void _triggerShakeAnimation() {
-    _animationController
-        .forward(from: 0)
-        .then((_) => _animationController.reverse());
-  }
+
 
   @override
   void dispose() {
