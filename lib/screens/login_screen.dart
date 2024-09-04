@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print('Login successful: ${data}');
+        print('Login successful: ${data['authorisation']['token']}');
       } else {
         if (response.headers['content-type']?.contains('application/json') ?? false) {
           setState(() {
