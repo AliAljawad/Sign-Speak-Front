@@ -49,7 +49,7 @@ class _SignUpPageState extends State<SignUpPage> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User registered successfully!')),
+          const SnackBar(content: Text('User registered successfully!')),
         );
         // Navigate to another page if needed
       } else {
