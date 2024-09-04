@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage>
         _errorMessage = 'Please enter both email and password.';
       });
       _triggerShakeAnimation();
-      return; // Exit the function early
+      return;
     }
 
     setState(() {
