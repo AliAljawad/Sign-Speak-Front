@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
         future: _checkToken(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+  return const Center(child: CircularProgressIndicator());
+}
           if (snapshot.hasError) {
             return const Center(child: Text('An error occurred'));
           }
