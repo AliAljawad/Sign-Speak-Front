@@ -42,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
           // Store the token securely
           await _storage.write(key: 'jwt_token', value: token);
 
-          print('Login successful: $token');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Login failed')),
