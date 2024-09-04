@@ -60,6 +60,8 @@ void _captureAndSendFrame() async {
       );
       if (_webSocketChannel != null) {
         _webSocketChannel!.sink.add(compressedBytes); // Send the compressed bytes to the server
+      }else{
+        print('WebSocket is not initialized');
       }
       await Future.delayed(const Duration(milliseconds: 100)); // adjust the delay as needed
     }
