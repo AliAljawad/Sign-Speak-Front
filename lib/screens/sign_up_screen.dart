@@ -54,13 +54,13 @@ class _SignUpPageState extends State<SignUpPage> {
         // Navigate to another page if needed
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Registration failed')),
+          const SnackBar(content: Text('Registration failed')),
         );
       }
     } catch (e) {
       // Handle other exceptions, such as network errors
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration failed')),
+        const SnackBar(content: Text('Registration failed')),
       );
     }
   }
