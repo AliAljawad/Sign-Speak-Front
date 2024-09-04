@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:sign_speak/screens/login_screen.dart';
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
