@@ -31,3 +31,32 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+Future<bool> _checkToken(BuildContext context) async {
+  final storage = FlutterSecureStorage();
+  final token = await storage.read(key: 'jwt_token');
+
+  if (token == null) {
+    return false; // No token found, navigate to LoginPage
+  }
+
+  final response = await http.get(
+    Uri.parse('http://10.0.2.2:8000/api/verify-token'),
+    headers: {
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    if (data['valid']) {
+      return true; // Token is valid, navigate to MyBottomNavigationBar
+    } else {
+      await storage.delete(key: 'jwt_token');
+      return false; // Token is invalid, navigate to LoginPage
+    }
+  } else {
+    await storage.delete(key: 'jwt_token');
+    return false; // Error occurred, navigate to LoginPage
+  }
+}
