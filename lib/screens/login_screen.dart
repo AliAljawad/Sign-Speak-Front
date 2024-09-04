@@ -14,11 +14,11 @@ class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _storage = const FlutterSecureStorage();
   bool _isLoading = false;
   String? _errorMessage;
   late AnimationController _animationController;
   late Animation<double> _shakeAnimation;
-  final _storage = const FlutterSecureStorage();
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage>
         _errorMessage = 'Please enter both email and password.';
       });
       _triggerShakeAnimation();
-      return;
+      return; // Exit the function early
     }
 
     setState(() {
@@ -60,9 +60,13 @@ class _LoginPageState extends State<LoginPage>
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        final token = data['authorisation']['token'];
+        final token = data['authorisation']
+            ['token']; // Assuming the token is in the 'token' key
+
+        // Store the token securely
         await _storage.write(key: 'jwt_token', value: token);
-        print('Login successful: ${data['authorisation']['token']}');
+
+        print('Login successful: $token');
       } else {
         if (response.headers['content-type']?.contains('application/json') ??
             false) {
@@ -75,7 +79,6 @@ class _LoginPageState extends State<LoginPage>
                 'Unexpected error occurred. Response not in JSON format.';
           });
         }
-
         _triggerShakeAnimation();
       }
     } catch (e) {
