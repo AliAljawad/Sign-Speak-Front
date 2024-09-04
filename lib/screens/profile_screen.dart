@@ -19,35 +19,35 @@ class ProfilePageState extends State<ProfilePage> {
       TextEditingController(text: "***************");
 
   bool _isEditing = false;
+
   Future<void> _logout(BuildContext context) async {
-  final storage = FlutterSecureStorage();
-  final token = await storage.read(key: 'jwt_token');
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'jwt_token');
 
-  if (token == null) {
-    // No token found, already logged out or not logged in
-    return;
-  }
+    if (token == null) {
+      // No token found, already logged out or not logged in
+      return;
+    }
 
-  final response = await http.post(
-    Uri.parse('http://10.0.2.2:8000/api/logout'),
-    headers: {
-      'Authorization': 'Bearer $token',
-    },
-  );
-
-  if (response.statusCode == 200) {
-    // Successfully logged out
-    await storage.delete(key: 'jwt_token');
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const LoginPage()),
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:8000/api/logout'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
     );
-  } else {
-    // Handle error
-    final snackBar = SnackBar(content: Text('Logout failed: ${response.reasonPhrase}'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-}
 
+    if (response.statusCode == 200) {
+      // Successfully logged out
+      await storage.delete(key: 'jwt_token');
+      Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+);
+    } else {
+      // Handle error
+      final snackBar = SnackBar(content: Text('Logout failed: ${response.reasonPhrase}'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
 
   void _toggleEdit() {
     setState(() {
@@ -131,8 +131,7 @@ class ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 minimumSize: const Size(double.infinity, 0),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                      8),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
               child: Text(_isEditing ? 'Save changes' : 'Edit Profile',
@@ -140,20 +139,20 @@ class ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-  onPressed: () async {
-    await _logout(context);
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.blue,
-    padding: const EdgeInsets.symmetric(vertical: 15),
-    minimumSize: const Size(double.infinity, 0),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-    ),
-  ),
-  child: const Text('Logout',
-      style: TextStyle(color: Colors.white, fontSize: 16)),
-),
+              onPressed: () async {
+                await _logout(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                minimumSize: const Size(double.infinity, 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text('Logout',
+                  style: TextStyle(color: Colors.white, fontSize: 16)),
+            ),
           ],
         ),
       ),
