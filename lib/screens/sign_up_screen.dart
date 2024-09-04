@@ -23,7 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
   if (_formKey.currentState!.validate()) {
     if (_selectedUserType == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a user type')),
+        const SnackBar(content: Text('Please select a user type')),
       );
       return;
     }
