@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 }
 
 Future<bool> _checkToken(BuildContext context) async {
-  final storage = const FlutterSecureStorage();
+  const storage = FlutterSecureStorage();
   final token = await storage.read(key: 'jwt_token');
 
   if (token == null) {
