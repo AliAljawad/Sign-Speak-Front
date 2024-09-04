@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
   return const Center(child: Text('An error occurred'));
 }
           return snapshot.data == true
-              ? const MyBottomNavigationBar()
-              : const LoginPage();
+    ? const MyBottomNavigationBar()
+    : const LoginPage();
         },
       ),
     );
