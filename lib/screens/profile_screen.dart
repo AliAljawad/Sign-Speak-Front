@@ -21,7 +21,7 @@ class ProfilePageState extends State<ProfilePage> {
   bool _isEditing = false;
 
   Future<void> _logout(BuildContext context) async {
-    final storage = FlutterSecureStorage();
+    const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'jwt_token');
 
     if (token == null) {
