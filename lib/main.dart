@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
   return const Center(child: CircularProgressIndicator());
 }
           if (snapshot.hasError) {
-            return const Center(child: Text('An error occurred'));
-          }
+  return const Center(child: Text('An error occurred'));
+}
           return snapshot.data == true
               ? const MyBottomNavigationBar()
               : const LoginPage();
