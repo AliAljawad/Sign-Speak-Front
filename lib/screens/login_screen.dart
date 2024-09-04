@@ -199,20 +199,6 @@ class _LoginPageState extends State<LoginPage>
                     ),
             ),
             const SizedBox(height: 5),
-            AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(_shakeAnimation.value, 0),
-                  child: _errorMessage != null
-                      ? Text(
-                          _errorMessage!,
-                          style: const TextStyle(color: Colors.red),
-                        )
-                      : const SizedBox.shrink(),
-                );
-              },
-            ),
             TextButton(
               onPressed: () {},
               child: RichText(
