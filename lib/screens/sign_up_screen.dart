@@ -175,8 +175,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 onChanged: (value) {
                   setState(() {
                     _selectedUserType = value;
-                    print(
-                        'Selected user type: $_selectedUserType'); // Debugging line
                   });
                 },
                 decoration: const InputDecoration(
