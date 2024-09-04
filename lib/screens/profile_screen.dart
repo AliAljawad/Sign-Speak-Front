@@ -18,6 +18,35 @@ class ProfilePageState extends State<ProfilePage> {
       TextEditingController(text: "***************");
 
   bool _isEditing = false;
+  Future<void> _logout(BuildContext context) async {
+  final storage = FlutterSecureStorage();
+  final token = await storage.read(key: 'jwt_token');
+
+  if (token == null) {
+    // No token found, already logged out or not logged in
+    return;
+  }
+
+  final response = await http.post(
+    Uri.parse('http://10.0.2.2:8000/api/logout'),
+    headers: {
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    // Successfully logged out
+    await storage.delete(key: 'jwt_token');
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+  } else {
+    // Handle error
+    final snackBar = SnackBar(content: Text('Logout failed: ${response.reasonPhrase}'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+}
+
 
   void _toggleEdit() {
     setState(() {
