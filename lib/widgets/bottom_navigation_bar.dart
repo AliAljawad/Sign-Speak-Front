@@ -23,7 +23,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   Future<void> _initializeCamera() async {
     setState(() {
       _pages = [
-        LiveTranslationScreen(),
+        const LiveTranslationScreen(),
         const HistoryPage(),
         const ProfilePage(),
       ];
