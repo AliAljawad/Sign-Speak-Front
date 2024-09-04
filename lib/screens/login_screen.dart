@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sign_speak/widgets/bottom_navigation_bar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,6 +42,9 @@ class _LoginPageState extends State<LoginPage> {
 
           // Store the token securely
           await _storage.write(key: 'jwt_token', value: token);
+          Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const MyBottomNavigationBar()),
+);
 
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
