@@ -21,6 +21,7 @@ class ProfilePageState extends State<ProfilePage> {
   bool _isEditing = false;
   bool _isLoading = false;
   bool _isUserLoading = true;
+  String _profileImageUrl = '';
 
   @override
   void initState() {
