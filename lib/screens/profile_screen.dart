@@ -148,7 +148,9 @@ void initState() {
             style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
-      body: Padding(
+      body: _isUserLoading
+    ? const Center(child: CircularProgressIndicator())
+    : Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
