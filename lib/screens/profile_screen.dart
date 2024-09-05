@@ -168,18 +168,18 @@ class ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _toggleEdit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                minimumSize: const Size(double.infinity, 0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(_isEditing ? 'Save changes' : 'Edit Profile',
-                  style: const TextStyle(color: Colors.white, fontSize: 16)),
-            ),
+  onPressed: _isEditing ? _updateProfile : _toggleEdit,
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.blue,
+    padding: const EdgeInsets.symmetric(vertical: 15),
+    minimumSize: const Size(double.infinity, 0),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+  ),
+  child: Text(_isEditing ? 'Save changes' : 'Edit Profile',
+      style: const TextStyle(color: Colors.white, fontSize: 16)),
+),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
