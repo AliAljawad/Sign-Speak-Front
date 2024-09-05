@@ -214,7 +214,7 @@ class ProfilePageState extends State<ProfilePage> {
   backgroundImage: _profileImage != null
       ? FileImage(_profileImage!)
       : _profileImageUrl.isNotEmpty
-          ? NetworkImage('http://10.0.2.2:8000/storage/' + _profileImageUrl)
+          ? NetworkImage('http://10.0.2.2:8000/storage/$_profileImageUrl')
           : const AssetImage('assets/default_image.jpg') as ImageProvider,
   child: _profileImage == null && _profileImageUrl.isEmpty
       ? const Icon(Icons.camera_alt, size: 50, color: Colors.white)
