@@ -202,11 +202,20 @@ class ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundImage:
-                        NetworkImage('https://via.placeholder.com/150'),
-                  ),
+                  GestureDetector(
+  onTap: _isEditing ? _pickImage : null,
+  child: CircleAvatar(
+    radius: 50,
+    backgroundImage: _profileImage != null
+        ? FileImage(_profileImage!)
+        : _profileImageUrl.isNotEmpty
+            ? NetworkImage('http://10.0.2.2:8000/storage/'+_profileImageUrl)
+            : const AssetImage('assets/default_image.jpg') as ImageProvider,
+    child: _profileImage == null
+        ? const Icon(Icons.camera_alt, size: 50, color: Colors.white)
+        : null,
+  ),
+),
                   const SizedBox(height: 30),
                   TextField(
                     controller: _nameController,
