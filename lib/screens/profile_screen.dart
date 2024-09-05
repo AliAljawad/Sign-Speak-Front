@@ -16,7 +16,7 @@ final TextEditingController _nameController = TextEditingController();
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _passwordController = TextEditingController();
 
-
+  bool _isUserLoading = true;
   bool _isEditing = false;
   bool _isLoading = false;
 
