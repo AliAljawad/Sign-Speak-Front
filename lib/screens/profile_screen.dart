@@ -179,7 +179,11 @@ class ProfilePageState extends State<ProfilePage> {
   ),
   child: Text(_isEditing ? 'Save changes' : 'Edit Profile',
       style: const TextStyle(color: Colors.white, fontSize: 16)),
-),
+),if (_isLoading)
+  const Padding(
+    padding: EdgeInsets.only(top: 20),
+    child: CircularProgressIndicator(),
+  ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
