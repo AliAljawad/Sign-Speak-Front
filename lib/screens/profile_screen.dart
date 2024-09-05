@@ -57,6 +57,7 @@ class ProfilePageState extends State<ProfilePage> {
       final data = jsonDecode(response.body);
       _nameController.text = data['name'] ?? '';
       _emailController.text = data['email'] ?? '';
+      _profileImageUrl = data['profile_image'] ?? '';
     } else {
       // Handle error (e.g., show error message)
       final snackBar = SnackBar(
