@@ -279,7 +279,7 @@ class ProfilePageState extends State<ProfilePage> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                    child: Text(_isEditing ? 'Save Changes' : 'Edit Profile'),
+                    child: Text(_isEditing ? 'Save Changes' : 'Edit Profile',style: const TextStyle(color: Colors.white, fontSize: 16))
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
