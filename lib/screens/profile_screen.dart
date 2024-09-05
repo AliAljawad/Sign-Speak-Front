@@ -105,12 +105,12 @@ final TextEditingController _passwordController = TextEditingController();
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
-        'name': _nameController.text,
-        'email': _emailController.text,
-        'password': _passwordController.text != "***************"
-            ? _passwordController.text
-            : null,
-      }),
+  'name': _nameController.text,
+  'email': _emailController.text,
+  'password': _passwordController.text.isNotEmpty && _passwordController.text != "***************"
+      ? _passwordController.text
+      : null,
+}),
     );
 
     if (response.statusCode == 200) {
