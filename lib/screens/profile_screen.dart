@@ -36,11 +36,11 @@ final TextEditingController _passwordController = TextEditingController();
   }
 
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:8000/api/getUser'),
-    headers: {
-      'Authorization': 'Bearer $token',
-    },
-  );
+  Uri.parse('http://10.0.2.2:8000/api/getUser'), // Adjust API endpoint as needed
+  headers: {
+    'Authorization': 'Bearer $token',
+  },
+);
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
