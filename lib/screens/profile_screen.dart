@@ -29,11 +29,11 @@ final TextEditingController _passwordController = TextEditingController();
   final token = await storage.read(key: 'jwt_token');
 
   if (token == null) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-    );
-    return;
-  }
+  Navigator.of(context).pushReplacement(
+    MaterialPageRoute(builder: (context) => const LoginPage()),
+  );
+  return;
+}
 
   final response = await http.get(
   Uri.parse('http://10.0.2.2:8000/api/getUser'), // Adjust API endpoint as needed
