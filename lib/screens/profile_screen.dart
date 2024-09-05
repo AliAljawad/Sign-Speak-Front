@@ -22,7 +22,7 @@ class ProfilePageState extends State<ProfilePage> {
   bool _isEditing = false;
   bool _isUserLoading = true;
   File? _profileImage;
-  String _profileImageUrl = ''; // URL for remote image
+  String _profileImageUrl = '';
 
   @override
   void initState() {
