@@ -83,14 +83,13 @@ class ProfilePageState extends State<ProfilePage> {
 );
 
   if (response.statusCode == 200) {
-    final snackBar = SnackBar(content: Text('Profile updated successfully'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  } else {
-    print(response.reasonPhrase);
-    final snackBar = SnackBar(content: Text('Update failed: ${response.reasonPhrase}'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
+  final snackBar = SnackBar(content: Text('Profile updated successfully'));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+} else {
+  print(response.reasonPhrase);
+  final snackBar = SnackBar(content: Text('Update failed: ${response.reasonPhrase}'));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
   setState(() {
     _isLoading = false;
     _isEditing = false;
