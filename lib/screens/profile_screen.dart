@@ -285,7 +285,7 @@ class ProfilePageState extends State<ProfilePage> {
                   ElevatedButton(
                     onPressed: () => _logout(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       minimumSize: const Size(double.infinity, 0),
                       shape: RoundedRectangleBorder(
