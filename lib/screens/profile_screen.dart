@@ -20,7 +20,6 @@ class ProfilePageState extends State<ProfilePage> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isEditing = false;
-  bool _isLoading = false;
   bool _isUserLoading = true;
   File? _profileImage;
   String _profileImageUrl = ''; // URL for remote image
@@ -104,7 +103,6 @@ class ProfilePageState extends State<ProfilePage> {
 
   Future<void> _updateProfile() async {
     setState(() {
-      _isLoading = true;
     });
 
     const storage = FlutterSecureStorage();
@@ -164,7 +162,6 @@ class ProfilePageState extends State<ProfilePage> {
     }
 
     setState(() {
-      _isLoading = false;
       _isEditing = false;
     });
   }
