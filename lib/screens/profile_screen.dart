@@ -134,6 +134,11 @@ final TextEditingController _passwordController = TextEditingController();
       _isEditing = !_isEditing;
     });
   }
+  @override
+void initState() {
+  super.initState();
+  _fetchUserData();
+}
 
   @override
   Widget build(BuildContext context) {
