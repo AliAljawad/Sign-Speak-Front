@@ -201,22 +201,26 @@ class ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 20),
                   TextField(
-  controller: _passwordController,
-  decoration: InputDecoration(
-    labelText: 'Password',
-    hintText: _isEditing ? 'Enter new password if you want to change it' : '',
-    border: OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-      borderRadius: BorderRadius.circular(8.0),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-      borderRadius: BorderRadius.circular(8.0),
-    ),
-  ),
-  obscureText: true,
-  enabled: _isEditing,
-),
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      hintText: _isEditing
+                          ? 'Enter new password if you want to change it'
+                          : '',
+                      border: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    obscureText: true,
+                    enabled: _isEditing,
+                  ),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _isEditing ? _updateProfile : _toggleEdit,
