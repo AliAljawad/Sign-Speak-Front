@@ -12,12 +12,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
-  final TextEditingController _nameController =
-      TextEditingController(text: "John Doe");
-  final TextEditingController _emailController =
-      TextEditingController(text: "JohnDoe@gmail.com");
-  final TextEditingController _passwordController =
-      TextEditingController(text: "***************");
+final TextEditingController _nameController = TextEditingController();
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _passwordController = TextEditingController();
+
 
   bool _isEditing = false;
   bool _isLoading = false;
