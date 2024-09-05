@@ -161,13 +161,24 @@ class ProfilePageState extends State<ProfilePage> {
       print('Error uploading profile image: $e');
     }
   }
-
-
     setState(() {
       _isLoading = false;
       _isEditing = false;
     });
   }
+  Future<void> _pickImage() async {
+  final picker = ImagePicker();
+  try {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+    }
+  } catch (e) {
+    print('Error picking image: $e');
+  }
+}
 
   void _toggleEdit() {
     setState(() {
