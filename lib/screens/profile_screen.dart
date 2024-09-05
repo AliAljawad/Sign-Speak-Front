@@ -20,6 +20,43 @@ final TextEditingController _passwordController = TextEditingController();
   bool _isEditing = false;
   bool _isLoading = false;
 
+  Future<void> _fetchUserData() async {
+  setState(() {
+    _isUserLoading = true;
+  });
+
+  const storage = FlutterSecureStorage();
+  final token = await storage.read(key: 'jwt_token');
+
+  if (token == null) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+    return;
+  }
+
+  final response = await http.get(
+    Uri.parse('http://10.0.2.2:8000/api/getUser'),
+    headers: {
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    _nameController.text = data['name'] ?? '';
+    _emailController.text = data['email'] ?? '';
+  } else {
+    final snackBar = SnackBar(content: Text('Failed to fetch user data: ${response.reasonPhrase}'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  setState(() {
+    _isUserLoading = false;
+  });
+}
+
+
   Future<void> _logout(BuildContext context) async {
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'jwt_token');
