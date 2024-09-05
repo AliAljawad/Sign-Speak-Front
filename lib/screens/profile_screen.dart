@@ -204,6 +204,7 @@ class ProfilePageState extends State<ProfilePage> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Password',
+                      hintText: _isEditing ? 'Enter password' : '******',
                       border: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.grey, width: 1.0),
