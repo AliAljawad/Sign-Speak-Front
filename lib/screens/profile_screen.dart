@@ -292,7 +292,7 @@ class ProfilePageState extends State<ProfilePage> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                    child: const Text('Logout'),
+                    child: const Text('Logout',style: TextStyle(color: Colors.white, fontSize: 16)),
                   ),
                 ],
               ),
