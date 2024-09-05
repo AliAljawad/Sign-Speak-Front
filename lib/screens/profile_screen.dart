@@ -56,6 +56,46 @@ class ProfilePageState extends State<ProfilePage> {
       _isEditing = !_isEditing;
     });
   }
+  Future<void> _updateProfile() async {
+  setState(() {
+    _isLoading = true;
+  });
+
+  const storage = FlutterSecureStorage();
+  final token = await storage.read(key: 'jwt_token');
+
+  if (token == null) {
+    return;
+  }
+
+  final response = await http.put(
+    Uri.parse('http://10.0.2.2:8000/api/updateUser'),
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'name': _nameController.text,
+      'email': _emailController.text,
+      'password': _passwordController.text != "***************" ? _passwordController.text : null,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    final snackBar = SnackBar(content: Text('Profile updated successfully'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  } else {
+    print(response.reasonPhrase);
+    final snackBar = SnackBar(content: Text('Update failed: ${response.reasonPhrase}'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  setState(() {
+    _isLoading = false;
+    _isEditing = false;
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
