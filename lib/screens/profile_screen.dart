@@ -12,50 +12,59 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
-final TextEditingController _nameController = TextEditingController();
-final TextEditingController _emailController = TextEditingController();
-final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  bool _isUserLoading = true;
   bool _isEditing = false;
   bool _isLoading = false;
+  bool _isUserLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
 
   Future<void> _fetchUserData() async {
-  setState(() {
-    _isUserLoading = true;
-  });
+    setState(() {
+      _isUserLoading = true;
+    });
 
-  const storage = FlutterSecureStorage();
-  final token = await storage.read(key: 'jwt_token');
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'jwt_token');
 
-  if (token == null) {
-  Navigator.of(context).pushReplacement(
-    MaterialPageRoute(builder: (context) => const LoginPage()),
-  );
-  return;
-}
+    if (token == null) {
+      // Handle case where token is not available (e.g., redirect to login)
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+      return;
+    }
 
-  final response = await http.get(
-  Uri.parse('http://10.0.2.2:8000/api/getUser'), // Adjust API endpoint as needed
-  headers: {
-    'Authorization': 'Bearer $token',
-  },
-);
+    final response = await http.get(
+      Uri.parse(
+          'http://10.0.2.2:8000/api/getUser'), // Adjust API endpoint as needed
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    _nameController.text = data['name'] ?? '';
-    _emailController.text = data['email'] ?? '';
-  } else if (response.statusCode != 200) {
-  final snackBar = SnackBar(content: Text('Failed to fetch user data: ${response.reasonPhrase}'));
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-}
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      _nameController.text = data['name'] ?? '';
+      _emailController.text = data['email'] ?? '';
+    } else {
+      // Handle error (e.g., show error message)
+      final snackBar = SnackBar(
+          content: Text('Failed to fetch user data: ${response.reasonPhrase}'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
 
-  setState(() {
-    _isUserLoading = false;
-  });
-}
-
+    setState(() {
+      _isUserLoading = false;
+    });
+  }
 
   Future<void> _logout(BuildContext context) async {
     const storage = FlutterSecureStorage();
@@ -91,7 +100,6 @@ final TextEditingController _passwordController = TextEditingController();
 
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'jwt_token');
-    print(token);
 
     if (token == null) {
       return;
@@ -105,21 +113,22 @@ final TextEditingController _passwordController = TextEditingController();
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
-  'name': _nameController.text,
-  'email': _emailController.text,
-  'password': _passwordController.text.isNotEmpty && _passwordController.text != "***************"
-      ? _passwordController.text
-      : null,
-}),
+        'name': _nameController.text,
+        'email': _emailController.text,
+        'password': _passwordController.text != "***************"
+            ? _passwordController.text
+            : null,
+      }),
     );
 
     if (response.statusCode == 200) {
-  final snackBar = SnackBar(content: Text('Profile updated successfully'));
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-} else {
-  final snackBar = SnackBar(content: Text('Update failed: ${response.reasonPhrase}'));
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-}
+      final snackBar = SnackBar(content: Text('Profile updated successfully'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else {
+      final snackBar =
+          SnackBar(content: Text('Update failed: ${response.reasonPhrase}'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
 
     setState(() {
       _isLoading = false;
@@ -132,11 +141,6 @@ final TextEditingController _passwordController = TextEditingController();
       _isEditing = !_isEditing;
     });
   }
-  @override
-void initState() {
-  super.initState();
-  _fetchUserData();
-}
 
   @override
   Widget build(BuildContext context) {
@@ -147,104 +151,112 @@ void initState() {
         centerTitle: true,
       ),
       body: _isUserLoading
-    ? const Center(child: CircularProgressIndicator())
-    : Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-            ),
-            const SizedBox(height: 30),
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  const CircleAvatar(
+                    radius: 50,
+                    backgroundImage:
+                        NetworkImage('https://via.placeholder.com/150'),
+                  ),
+                  const SizedBox(height: 30),
+                  TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    enabled: _isEditing,
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    enabled: _isEditing,
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.0),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    obscureText: true,
+                    enabled: _isEditing,
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _isEditing ? _updateProfile : _toggleEdit,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      minimumSize: const Size(double.infinity, 0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(_isEditing ? 'Save changes' : 'Edit Profile',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16)),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await _logout(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      minimumSize: const Size(double.infinity, 0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text('Logout',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                  ),
+                  if (_isLoading)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: CircularProgressIndicator(),
+                    ),
+                ],
               ),
-              enabled: _isEditing,
             ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              enabled: _isEditing,
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              obscureText: true,
-              enabled: _isEditing,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _isEditing ? _updateProfile : _toggleEdit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                minimumSize: const Size(double.infinity, 0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(_isEditing ? 'Save changes' : 'Edit Profile',
-                  style: const TextStyle(color: Colors.white, fontSize: 16)),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                await _logout(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                minimumSize: const Size(double.infinity, 0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text('Logout',
-                  style: TextStyle(color: Colors.white, fontSize: 16)),
-            ),
-            if (_isLoading)
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: CircularProgressIndicator(),
-              ),
-          ],
-        ),
-      ),
     );
   }
 }
