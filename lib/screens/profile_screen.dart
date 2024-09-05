@@ -1,4 +1,4 @@
-:import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -210,16 +210,16 @@ class ProfilePageState extends State<ProfilePage> {
                   GestureDetector(
                     onTap: _isEditing ? _pickImage : null,
                     child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: _profileImage != null
-                          ? FileImage(_profileImage!)
-                          : _profileImageUrl.isNotEmpty
-                              ? NetworkImage('http://10.0.2.2:8000/storage/'+_profileImageUrl)
-                              : const AssetImage('assets/default_image.jpg') as ImageProvider,
-                      child: _profileImage == null
-                          ? const Icon(Icons.camera_alt, size: 50, color: Colors.white)
-                          : null,
-                    ),
+  radius: 50,
+  backgroundImage: _profileImage != null
+      ? FileImage(_profileImage!)
+      : _profileImageUrl.isNotEmpty
+          ? NetworkImage('http://10.0.2.2:8000/storage/' + _profileImageUrl)
+          : const AssetImage('assets/default_image.jpg') as ImageProvider,
+  child: _profileImage == null && _profileImageUrl.isEmpty
+      ? const Icon(Icons.camera_alt, size: 50, color: Colors.white)
+      : null,
+),
                   ),
                   const SizedBox(height: 30),
                   TextField(
