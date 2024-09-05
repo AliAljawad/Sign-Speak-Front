@@ -133,6 +133,35 @@ class ProfilePageState extends State<ProfilePage> {
           SnackBar(content: Text('Update failed: ${response.reasonPhrase}'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+     if (_profileImage != null) {
+    final postRequest = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://10.0.2.2:8000/api/upload-image'),
+    );
+
+    postRequest.headers['Authorization'] = 'Bearer $token';
+
+    try {
+      final imageFile = await http.MultipartFile.fromPath(
+        'profile_image',
+        _profileImage!.path,
+        contentType: MediaType('image', 'jpeg'),
+        filename: 'profile_image.jpg',
+      );
+      postRequest.files.add(imageFile);
+
+      final imageResponse = await postRequest.send();
+
+      if (imageResponse.statusCode == 200) {
+        print('Profile image uploaded successfully');
+      } else {
+        print('Failed to upload profile image: ${imageResponse.statusCode}');
+      }
+    } catch (e) {
+      print('Error uploading profile image: $e');
+    }
+  }
+
 
     setState(() {
       _isLoading = false;
