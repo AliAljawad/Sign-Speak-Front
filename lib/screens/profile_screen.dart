@@ -21,6 +21,7 @@ class ProfilePageState extends State<ProfilePage> {
       TextEditingController(text: "***************");
 
   bool _isEditing = false;
+  bool _isLoading = false;
 
   Future<void> _logout(BuildContext context) async {
     const storage = FlutterSecureStorage();
