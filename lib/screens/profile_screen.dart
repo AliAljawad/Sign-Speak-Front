@@ -70,17 +70,17 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   final response = await http.put(
-    Uri.parse('http://10.0.2.2:8000/api/updateUser'),
-    headers: {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode({
-      'name': _nameController.text,
-      'email': _emailController.text,
-      'password': _passwordController.text != "***************" ? _passwordController.text : null,
-    }),
-  );
+  Uri.parse('http://10.0.2.2:8000/api/updateUser'),
+  headers: {
+    'Authorization': 'Bearer $token',
+    'Content-Type': 'application/json',
+  },
+  body: jsonEncode({
+    'name': _nameController.text,
+    'email': _emailController.text,
+    'password': _passwordController.text != "***************" ? _passwordController.text : null,
+  }),
+);
 
   if (response.statusCode == 200) {
     final snackBar = SnackBar(content: Text('Profile updated successfully'));
