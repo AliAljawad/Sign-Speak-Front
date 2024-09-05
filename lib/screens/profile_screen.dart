@@ -46,10 +46,10 @@ final TextEditingController _passwordController = TextEditingController();
     final data = jsonDecode(response.body);
     _nameController.text = data['name'] ?? '';
     _emailController.text = data['email'] ?? '';
-  } else {
-    final snackBar = SnackBar(content: Text('Failed to fetch user data: ${response.reasonPhrase}'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+  } else if (response.statusCode != 200) {
+  final snackBar = SnackBar(content: Text('Failed to fetch user data: ${response.reasonPhrase}'));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
 
   setState(() {
     _isUserLoading = false;
