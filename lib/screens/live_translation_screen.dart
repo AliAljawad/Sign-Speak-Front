@@ -127,17 +127,29 @@ void _captureAndSendFrame() async {
           _buildVoiceDropdown(),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () {
-              setState(() {
-                _isTranslating = !_isTranslating;
-              });
-              if (_isTranslating) {
-                _connectToWebSocket();
-                _captureAndSendFrame();
-              }
-            },
-            child: Text(_isTranslating ? 'Stop Translation' : 'Start Translation'),
-          ),
+  onPressed: () {
+    setState(() {
+      _isTranslating = !_isTranslating;
+    });
+    if (_isTranslating) {
+      _connectToWebSocket();
+      _captureAndSendFrame();
+    }
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.blue, // Set background color to blue
+    padding: const EdgeInsets.symmetric(vertical: 15), // Add vertical padding
+    minimumSize: const Size(double.infinity, 0), // Make button take full width
+  ),
+  child: Text(
+    _isTranslating ? 'Stop Translation' : 'Start Translation',
+    style: const TextStyle(
+      color: Colors.white,
+      fontSize: 16,
+    ),
+  ),
+),
+
           const SizedBox(height: 20),
           Text(
             'Translation: $_translation',
