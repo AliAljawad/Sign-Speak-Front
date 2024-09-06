@@ -95,8 +95,17 @@ void _captureAndSendFrame() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Live Translation'),
+      centerTitle: true, 
+      title: const Text(
+        'Live Translation',
+        style: TextStyle(
+          fontSize: 26,
+          fontWeight: FontWeight.bold,
+        ),
       ),
+      backgroundColor: Colors.white, 
+      elevation: 0, 
+    ),
       body: Column(
         children: [
           Container(
