@@ -38,7 +38,7 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
       },
     );
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -114,6 +114,8 @@ void _captureAndSendFrame() async {
             'This is live translation of the camera feed',
             style: TextStyle(fontSize: 16),
           ),
+          const SizedBox(height: 20),
+          _buildVoiceDropdown(),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
