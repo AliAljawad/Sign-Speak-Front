@@ -150,11 +150,12 @@ Text(
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue, // Set background color to blue
-              padding: const EdgeInsets.symmetric(
-                  vertical: 15), // Add vertical padding
-              minimumSize:
-                  const Size(double.infinity, 0), // Make button take full width
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      minimumSize: const Size(double.infinity, 0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
             ),
             child: Text(
               _isTranslating ? 'Stop Translation' : 'Start Translation',
