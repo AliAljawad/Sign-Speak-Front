@@ -16,16 +16,17 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   WebSocketChannel? _webSocketChannel;
   bool _isTranslating = false;
   String _translation = '';
-  bool _isCameraInitialized = false; 
-   String _selectedVoice = 'Voice 1'; 
-    Widget _buildVoiceDropdown() {
+  bool _isCameraInitialized = false;
+  String _selectedVoice = 'Voice 1';
+  Widget _buildVoiceDropdown() {
     return DropdownButtonFormField<String>(
       decoration: const InputDecoration(
         labelText: 'Choose voice',
         border: OutlineInputBorder(),
       ),
       value: _selectedVoice,
-      items: <String>['Voice 1', 'Voice 2', 'Voice 3'].map<DropdownMenuItem<String>>((String value) {
+      items: <String>['Voice 1', 'Voice 2', 'Voice 3']
+          .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),
@@ -68,50 +69,54 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
     });
   }
 
-void _captureAndSendFrame() async {
-  if (_controller != null && _controller!.value.isInitialized) {
-    while (_isTranslating) {
-      final XFile image = await _controller!.takePicture();
-      final Uint8List bytes = await image.readAsBytes();
-      final compressedBytes = await FlutterImageCompress.compressWithList(
-        bytes,
-        minHeight: 480,
-        minWidth: 640,
-        quality: 90,
-      );
-      if (_webSocketChannel != null) {
-        _webSocketChannel!.sink.add(compressedBytes); // Send the compressed bytes to the server
-      }else{
-        print('WebSocket is not initialized');
+  void _captureAndSendFrame() async {
+    if (_controller != null && _controller!.value.isInitialized) {
+      while (_isTranslating) {
+        final XFile image = await _controller!.takePicture();
+        final Uint8List bytes = await image.readAsBytes();
+        final compressedBytes = await FlutterImageCompress.compressWithList(
+          bytes,
+          minHeight: 480,
+          minWidth: 640,
+          quality: 90,
+        );
+        if (_webSocketChannel != null) {
+          _webSocketChannel!.sink
+              .add(compressedBytes); // Send the compressed bytes to the server
+        } else {
+          print('WebSocket is not initialized');
+        }
+        await Future.delayed(
+            const Duration(milliseconds: 100)); // adjust the delay as needed
       }
-      await Future.delayed(const Duration(milliseconds: 100)); // adjust the delay as needed
+    } else {
+      print('Camera is not initialized');
     }
-  } else {
-    print('Camera is not initialized');
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      centerTitle: true, 
-      title: const Text(
-        'Live Translation',
-        style: TextStyle(
-          fontSize: 26,
-          fontWeight: FontWeight.bold,
+        centerTitle: true,
+        title: const Text(
+          'Live Translation',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
-      backgroundColor: Colors.white, 
-      elevation: 0, 
-    ),
       body: Column(
         children: [
           Container(
             width: double.infinity,
             height: 450,
-            color: _isTranslating ? Colors.black : Colors.grey[300],
+            color: _isTranslating
+                ? Colors.black
+                : Colors.grey[300], // Change color based on translation state
             child: _isCameraInitialized
                 ? CameraPreview(_controller!)
                 : const Center(
@@ -127,29 +132,30 @@ void _captureAndSendFrame() async {
           _buildVoiceDropdown(),
           const SizedBox(height: 20),
           ElevatedButton(
-  onPressed: () {
-    setState(() {
-      _isTranslating = !_isTranslating;
-    });
-    if (_isTranslating) {
-      _connectToWebSocket();
-      _captureAndSendFrame();
-    }
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.blue, // Set background color to blue
-    padding: const EdgeInsets.symmetric(vertical: 15), // Add vertical padding
-    minimumSize: const Size(double.infinity, 0), // Make button take full width
-  ),
-  child: Text(
-    _isTranslating ? 'Stop Translation' : 'Start Translation',
-    style: const TextStyle(
-      color: Colors.white,
-      fontSize: 16,
-    ),
-  ),
-),
-
+            onPressed: () {
+              setState(() {
+                _isTranslating = !_isTranslating;
+              });
+              if (_isTranslating) {
+                _connectToWebSocket();
+                _captureAndSendFrame();
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue, // Set background color to blue
+              padding: const EdgeInsets.symmetric(
+                  vertical: 15), // Add vertical padding
+              minimumSize:
+                  const Size(double.infinity, 0), // Make button take full width
+            ),
+            child: Text(
+              _isTranslating ? 'Stop Translation' : 'Start Translation',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+          ),
           const SizedBox(height: 20),
           Text(
             'Translation: $_translation',
