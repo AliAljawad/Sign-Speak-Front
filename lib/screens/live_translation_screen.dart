@@ -160,11 +160,6 @@ Text(
               ),
             ),
           ),
-          const SizedBox(height: 20),
-          Text(
-            'Translation: $_translation',
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
         ],
       ),
     );
