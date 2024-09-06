@@ -124,10 +124,12 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
                   ),
           ),
           const SizedBox(height: 20),
-const Text(
-  'This is live translation of the camera feed',
-  style: TextStyle(fontSize: 16),
-  textAlign: TextAlign.center, // Center the text
+Text(
+  'Translation: $_translation',
+  style: const TextStyle(
+    fontSize: 24,  // Increase font size
+    fontWeight: FontWeight.bold, // Set font weight to bold
+  ),
 ),
           const SizedBox(height: 20),
           _buildVoiceDropdown(),
