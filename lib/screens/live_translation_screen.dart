@@ -16,7 +16,8 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   WebSocketChannel? _webSocketChannel;
   bool _isTranslating = false;
   String _translation = '';
-  bool _isCameraInitialized = false; // Add a flag to track camera initialization
+  bool _isCameraInitialized = false; 
+   String _selectedVoice = 'Voice 1'; // Add a field for selected voice
 
   @override
   void initState() {
