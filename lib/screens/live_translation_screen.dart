@@ -98,6 +98,7 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
@@ -110,7 +111,10 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Column(
+      body:SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             width: double.infinity,
@@ -161,6 +165,7 @@ Text(
             ),
           ),
         ],
+      ),
       ),
     );
   }
