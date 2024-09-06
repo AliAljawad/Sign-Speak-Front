@@ -18,26 +18,27 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   String _translation = '';
   bool _isCameraInitialized = false;
   String _selectedVoice = 'Voice 1';
+
+
   Widget _buildVoiceDropdown() {
     return DropdownButtonFormField<String>(
-      decoration: const InputDecoration(
-        labelText: 'Choose voice',
-        border: OutlineInputBorder(),
-      ),
-      value: _selectedVoice,
-      items: <String>['Voice 1', 'Voice 2', 'Voice 3']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onChanged: (String? value) {
-        setState(() {
-          _selectedVoice = value!;
-        });
-      },
+  decoration: const InputDecoration(
+    labelText: 'Choose voice',
+    border: OutlineInputBorder(),
+  ),
+  value: _selectedVoice,
+  items: <String>['Voice 1', 'Voice 2', 'Voice 3'].map<DropdownMenuItem<String>>((String value) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Text(value),
     );
+  }).toList(),
+  onChanged: (String? value) {
+    setState(() {
+      _selectedVoice = value!; // Update selected voice
+    });
+  },
+);
   }
 
   @override
