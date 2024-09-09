@@ -136,11 +136,12 @@ Future<String> _saveAudioFile(List<int> audioBytes) async {
   return filePath;
 }
 
-  @override
-  void dispose() {
-    _videoController?.dispose();
-    super.dispose();
-  }
+@override
+void dispose() {
+  _videoController?.dispose();
+  _audioPlayer.dispose();
+  super.dispose();
+}
 
   Widget _buildMediaPreview() {
     if (_mediaFile == null) {
