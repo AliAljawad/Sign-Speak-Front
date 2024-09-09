@@ -16,20 +16,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FutureBuilder<bool>(
-        future: _checkToken(context),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return const Center(child: Text('An error occurred'));
-          }
-          return snapshot.data == true
-              ? const MyBottomNavigationBar()
-              : const LoginPage();
-        },
-      ),
+      home: const MyBottomNavigationBar(),
+      // home: FutureBuilder<bool>(
+      //   future: _checkToken(context),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return const Center(child: CircularProgressIndicator());
+      //     }
+      //     if (snapshot.hasError) {
+      //       return const Center(child: Text('An error occurred'));
+      //     }
+      //     return snapshot.data == true
+      //         ? const MyBottomNavigationBar()
+      //         : const LoginPage();
+      //   },
+      // ),
     );
   }
 }
