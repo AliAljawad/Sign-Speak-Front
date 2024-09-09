@@ -14,9 +14,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MyBottomNavigationBar(),
+      home: MyBottomNavigationBar(),
       // home: FutureBuilder<bool>(
       //   future: _checkToken(context),
       //   builder: (context, snapshot) {
