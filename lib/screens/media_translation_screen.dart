@@ -16,6 +16,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   XFile? _mediaFile;
   VideoPlayerController? _videoController;
   String _translation = ''; 
+  final AudioPlayer _audioPlayer = AudioPlayer(); // Audio player instance
+
 
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
