@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
-import 'package:audioplayers/audioplayers.dart'; 
+import 'package:audioplayers/audioplayers.dart';
 
 class MediaTranslationPage extends StatefulWidget {
   const MediaTranslationPage({super.key});
@@ -32,7 +32,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
                 leading: const Icon(Icons.photo),
                 title: const Text('Pick Image'),
                 onTap: () async {
-                  final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                  final XFile? pickedFile =
+                      await picker.pickImage(source: ImageSource.gallery);
                   setState(() {
                     _mediaFile = pickedFile;
                     _videoController = null;
@@ -44,13 +45,15 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
                 leading: const Icon(Icons.videocam),
                 title: const Text('Pick Video'),
                 onTap: () async {
-                  final XFile? pickedFile = await picker.pickVideo(source: ImageSource.gallery);
+                  final XFile? pickedFile =
+                      await picker.pickVideo(source: ImageSource.gallery);
                   if (pickedFile != null) {
-                    _videoController = VideoPlayerController.file(File(pickedFile.path))
-                      ..initialize().then((_) {
-                        setState(() {});
-                        _videoController!.play();
-                      });
+                    _videoController =
+                        VideoPlayerController.file(File(pickedFile.path))
+                          ..initialize().then((_) {
+                            setState(() {});
+                            _videoController!.play();
+                          });
                     setState(() {
                       _mediaFile = pickedFile;
                     });
@@ -85,7 +88,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
 
       if (response.statusCode == 200) {
         final responseData = await response.stream.bytesToString();
-        final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
+        final decodedResponse =
+            Map<String, dynamic>.from(jsonDecode(responseData));
 
         setState(() {
           _translation = decodedResponse['Translation'].toString();
@@ -95,7 +99,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
         _sendTranslationForSpeech(_translation);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to get a response from the server')),
+          const SnackBar(
+              content: Text('Failed to get a response from the server')),
         );
       }
     } catch (e) {
@@ -105,41 +110,43 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     }
   }
 
-Future<void> _sendTranslationForSpeech(String text) async {
-  final uri = Uri.parse('http://10.0.2.2:8000/api/speech'); // Laravel speech generation API
+  Future<void> _sendTranslationForSpeech(String text) async {
+    final uri = Uri.parse(
+        'http://10.0.2.2:8000/api/speech'); // Laravel speech generation API
 
-  try {
-    final response = await http.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'text': text}),
-    );
+    try {
+      final response = await http.post(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'text': text}),
+      );
 
-    if (response.statusCode == 200) {
-      // Play the audio returned by the API
-      final audioBytes = response.bodyBytes;
-      final audioPath = await _saveAudioFile(audioBytes);
-      await _audioPlayer.play(DeviceFileSource(audioPath)); // Updated method to play local file
-    } else {
+      if (response.statusCode == 200) {
+        // Play the audio returned by the API
+        final audioBytes = response.bodyBytes;
+        final audioPath = await _saveAudioFile(audioBytes);
+        await _audioPlayer.play(
+            DeviceFileSource(audioPath)); // Updated method to play local file
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to generate speech')),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to generate speech')),
+        SnackBar(
+            content: Text('An error occurred while generating speech: $e')),
       );
     }
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('An error occurred while generating speech: $e')),
-    );
   }
-}
 
-Future<String> _saveAudioFile(List<int> audioBytes) async {
-  final directory = await getApplicationDocumentsDirectory();
-  final filePath = '${directory.path}/audio_file.mp3';
-  final file = File(filePath);
-  await file.writeAsBytes(audioBytes);
-  return filePath;
-}
-
+  Future<String> _saveAudioFile(List<int> audioBytes) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/audio_file.mp3';
+    final file = File(filePath);
+    await file.writeAsBytes(audioBytes);
+    return filePath;
+  }
 
   @override
   void dispose() {
@@ -207,7 +214,9 @@ Future<String> _saveAudioFile(List<int> audioBytes) async {
                   ? _translation
                   : 'This is the translation of the picture or video you have uploaded',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16,),
+              style: const TextStyle(
+                fontSize: 16,
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
