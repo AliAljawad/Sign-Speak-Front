@@ -128,6 +128,13 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   }
 }
 
+Future<String> _saveAudioFile(List<int> audioBytes) async {
+  final directory = await getApplicationDocumentsDirectory();
+  final filePath = '${directory.path}/audio_file.mp3';
+  final file = File(filePath);
+  await file.writeAsBytes(audioBytes);
+  return filePath;
+}
 
   @override
   void dispose() {
