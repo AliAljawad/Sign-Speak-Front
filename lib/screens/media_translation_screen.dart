@@ -86,12 +86,13 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       final response = await request.send();
 
       if (response.statusCode == 200) {
-        final responseData = await response.stream.bytesToString();
-        final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
+  final responseData = await response.stream.bytesToString();
+  final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
+  setState(() {
+    _translation = decodedResponse['Translation'].toString();
+  });
+  _sendTranslationForSpeech(_translation); // Send translation to generate speech
 
-        setState(() {
-          _translation = decodedResponse['Translation'].toString();
-        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to get a response from the server')),
