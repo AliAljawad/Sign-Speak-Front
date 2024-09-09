@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sign_speak/screens/history_screen.dart';
 import 'package:sign_speak/screens/live_translation_screen.dart';
+import 'package:sign_speak/screens/media_translation_screen.dart';
 import 'package:sign_speak/screens/profile_screen.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
@@ -23,7 +24,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   Future<void> _initializeCamera() async {
     setState(() {
       _pages = [
-        const LiveTranslationScreen(),
+        // const LiveTranslationScreen(),
+        const MediaTranslationPage(),
         const HistoryPage(),
         const ProfilePage(),
       ];

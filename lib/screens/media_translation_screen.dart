@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MediaTranslationPage extends StatefulWidget {
   const MediaTranslationPage({super.key});
@@ -19,6 +20,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   VideoPlayerController? _videoController;
   String _translation = '';
   final AudioPlayer _audioPlayer = AudioPlayer(); // Audio player instance
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
@@ -68,7 +70,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     );
   }
 
-  Future<void> _translateMedia() async {
+ Future<void> _translateMedia() async {
     if (_mediaFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('No media file selected')),
@@ -99,8 +101,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
         _sendTranslationForSpeech(_translation);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Failed to get a response from the server')),
+          const SnackBar(content: Text('Failed to get a response from the server')),
         );
       }
     } catch (e) {
@@ -110,9 +111,9 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     }
   }
 
+
   Future<void> _sendTranslationForSpeech(String text) async {
-    final uri = Uri.parse(
-        'http://10.0.2.2:8000/api/speech'); // Laravel speech generation API
+    final uri = Uri.parse('http://10.0.2.2:8000/api/speech'); // Laravel speech generation API
 
     try {
       final response = await http.post(
@@ -125,8 +126,10 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
         // Play the audio returned by the API
         final audioBytes = response.bodyBytes;
         final audioPath = await _saveAudioFile(audioBytes);
-        await _audioPlayer.play(
-            DeviceFileSource(audioPath)); // Updated method to play local file
+        await _audioPlayer.play(DeviceFileSource(audioPath)); // Updated method to play local file
+
+        // Save the translation and media file information to the Laravel API
+        _saveTranslation(text, audioPath);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to generate speech')),
@@ -134,8 +137,40 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('An error occurred while generating speech: $e')),
+        SnackBar(content: Text('An error occurred while generating speech: $e')),
+      );
+    }
+  }
+
+  Future<void> _saveTranslation(String text, String audioPath) async {
+    final jwtToken = await _storage.read(key: 'jwt_token');
+    final uri = Uri.parse('http://10.0.2.2:8000/api/translations'); // Laravel store translation API
+
+    final request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $jwtToken'
+      ..fields['input_type'] = _mediaFile!.path.endsWith('.mp4') ? 'video' : 'image'
+      ..fields['translated_text'] = text
+      ..files.add(await http.MultipartFile.fromPath('translated_audio', audioPath))
+      ..files.add(await http.MultipartFile.fromPath('input_data', _mediaFile!.path));
+
+    try {
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        final responseData = await response.stream.bytesToString();
+        final decodedResponse = jsonDecode(responseData);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(decodedResponse['message'])),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to save translation')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred while saving translation: $e')),
       );
     }
   }
@@ -246,7 +281,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
                 ),
               ),
               child: const Text(
-                'Translate',
+                'Translate Media',
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
