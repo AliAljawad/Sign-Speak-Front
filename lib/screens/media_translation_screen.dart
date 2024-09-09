@@ -1,12 +1,11 @@
-import 'dart:convert'; 
+import 'dart:convert';
 import 'dart:io';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-
+import 'package:audioplayers/audioplayers.dart'; 
 
 class MediaTranslationPage extends StatefulWidget {
   const MediaTranslationPage({super.key});
@@ -18,9 +17,8 @@ class MediaTranslationPage extends StatefulWidget {
 class _MediaTranslationPageState extends State<MediaTranslationPage> {
   XFile? _mediaFile;
   VideoPlayerController? _videoController;
-  String _translation = ''; 
+  String _translation = '';
   final AudioPlayer _audioPlayer = AudioPlayer(); // Audio player instance
-
 
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
@@ -86,13 +84,15 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       final response = await request.send();
 
       if (response.statusCode == 200) {
-  final responseData = await response.stream.bytesToString();
-  final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
-  setState(() {
-    _translation = decodedResponse['Translation'].toString();
-  });
-  _sendTranslationForSpeech(_translation); // Send translation to generate speech
+        final responseData = await response.stream.bytesToString();
+        final decodedResponse = Map<String, dynamic>.from(jsonDecode(responseData));
 
+        setState(() {
+          _translation = decodedResponse['Translation'].toString();
+        });
+
+        // Send the translation to the Laravel API to get audio
+        _sendTranslationForSpeech(_translation);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to get a response from the server')),
@@ -104,19 +104,22 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       );
     }
   }
-  Future<void> _sendTranslationForSpeech(String text) async {
-  final uri = Uri.parse('http://10.0.2.2:8000/api/speech');
+
+Future<void> _sendTranslationForSpeech(String text) async {
+  final uri = Uri.parse('http://10.0.2.2:8000/api/speech'); // Laravel speech generation API
+
   try {
     final response = await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'text': text}),
     );
+
     if (response.statusCode == 200) {
       // Play the audio returned by the API
       final audioBytes = response.bodyBytes;
       final audioPath = await _saveAudioFile(audioBytes);
-      await _audioPlayer.play(DeviceFileSource(audioPath));
+      await _audioPlayer.play(DeviceFileSource(audioPath)); // Updated method to play local file
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to generate speech')),
@@ -137,12 +140,13 @@ Future<String> _saveAudioFile(List<int> audioBytes) async {
   return filePath;
 }
 
-@override
-void dispose() {
-  _videoController?.dispose();
-  _audioPlayer.dispose();
-  super.dispose();
-}
+
+  @override
+  void dispose() {
+    _videoController?.dispose();
+    _audioPlayer.dispose();
+    super.dispose();
+  }
 
   Widget _buildMediaPreview() {
     if (_mediaFile == null) {
@@ -203,8 +207,8 @@ void dispose() {
                   ? _translation
                   : 'This is the translation of the picture or video you have uploaded',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ), 
+              style: const TextStyle(fontSize: 16,),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _pickMedia,
@@ -218,12 +222,12 @@ void dispose() {
               ),
               child: const Text(
                 'Upload Image or Video',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             ElevatedButton(
-              onPressed: _translateMedia, 
+              onPressed: _translateMedia,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 padding: const EdgeInsets.symmetric(vertical: 15),
@@ -234,7 +238,7 @@ void dispose() {
               ),
               child: const Text(
                 'Translate',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
           ],
