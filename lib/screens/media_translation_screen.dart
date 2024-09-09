@@ -103,6 +103,31 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       );
     }
   }
+  Future<void> _sendTranslationForSpeech(String text) async {
+  final uri = Uri.parse('http://10.0.2.2:8000/api/speech');
+  try {
+    final response = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'text': text}),
+    );
+    if (response.statusCode == 200) {
+      // Play the audio returned by the API
+      final audioBytes = response.bodyBytes;
+      final audioPath = await _saveAudioFile(audioBytes);
+      await _audioPlayer.play(DeviceFileSource(audioPath));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to generate speech')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('An error occurred while generating speech: $e')),
+    );
+  }
+}
+
 
   @override
   void dispose() {
