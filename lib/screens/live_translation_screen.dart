@@ -62,105 +62,117 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
     });
   }
 
-  void _connectToWebSocket() async {
-    const url = 'ws://192.168.0.111:8002'; // Your server WebSocket URL
-    final webSocketChannel = WebSocketChannel.connect(Uri.parse(url));
-    setState(() {
-      _webSocketChannel = webSocketChannel;
-    });
+void _connectToWebSocket() async {
+  const url = 'ws://192.168.0.111:8002'; // Your server WebSocket URL
+  final webSocketChannel = WebSocketChannel.connect(Uri.parse(url));
+  setState(() {
+    _webSocketChannel = webSocketChannel;
+  });
 
-    webSocketChannel.stream.listen(
-      (event) {
-        print('Received from WebSocket: $event');
-        setState(() {
-          _translation = event;
-        });
-        if (_elevenLabsChannel != null) {
-          _sendTextToElevenLabs(event);
-        }
-      },
-      onError: (error) {
-        print('WebSocket error: $error');
-      },
-      onDone: () {
-        print('WebSocket connection closed');
-      },
-    );
-  }
+  webSocketChannel.stream.listen(
+    (event) {
+      print('Received from WebSocket: $event');
+      setState(() {
+        _translation = event;
+      });
+      if (_elevenLabsChannel != null) {
+        _sendTextToElevenLabs(event);
+      }
+    },
+    onError: (error) {
+      print('WebSocket error: $error');
+    },
+    onDone: () {
+      print('WebSocket connection closed');
+    },
+  );
+}
 
-  void _connectToElevenLabsWebSocket() {
-    const voiceId = 'cOgU50TlfkZIWfqK3ckV'; 
-    const uri = 'wss://api.elevenlabs.io/v1/text-to-speech/$voiceId/stream-input?model_id=eleven_turbo_v2_5';
+void _connectToElevenLabsWebSocket() {
+  const voiceId = 'cOgU50TlfkZIWfqK3ckV'; 
+  const uri = 'wss://api.elevenlabs.io/v1/text-to-speech/$voiceId/stream-input?model_id=eleven_turbo_v2_5';
 
-    final webSocketChannel = WebSocketChannel.connect(Uri.parse(uri));
-    setState(() {
-      _elevenLabsChannel = webSocketChannel;
-    });
-    print('Connected to Eleven Labs WebSocket');
+  final webSocketChannel = WebSocketChannel.connect(Uri.parse(uri));
+  setState(() {
+    _elevenLabsChannel = webSocketChannel;
+  });
+  print('Connected to Eleven Labs WebSocket');
 
-    // Send API key in the first message
-    final firstMessage = {
-      "xi_api_key": 'sk_3c1dd69d0a1d8a2736333eae6a0c9844ab6a9f3dc9ba2623', // Replace with your Eleven Labs API key
-    };
-  
-    _elevenLabsChannel!.sink.add(jsonEncode(firstMessage)); // Send the API key in the first message
+  // Send API key in the first message
+  final firstMessage = {
+    "xi_api_key": '', // Replace with your Eleven Labs API key
+  };
 
-    webSocketChannel.stream.listen(
-      (event) {
-        print('Received from Eleven Labs WebSocket: $event');
-        try {
-          final data = jsonDecode(event);
-          if (data.containsKey('audio') && data['audio'] != null) {
-            final audioData = base64Decode(data['audio']);
+  _elevenLabsChannel!.sink.add(jsonEncode(firstMessage)); // Send the API key in the first message
+
+  webSocketChannel.stream.listen(
+    (event) {
+      print('Received from Eleven Labs WebSocket: $event');
+      try {
+        final data = jsonDecode(event);
+        print('this is the data recieved from eleven labs $data');
+        if (data.containsKey('audio') && data['audio'] != null) {
+          final audioData = base64Decode(data['audio']);
+          print('Received audio data, length: ${audioData.length}');
+          if (audioData.isNotEmpty) {
             _playAudioChunk(audioData); // Play the received audio
           } else {
+            print('Received empty audio data');
             setState(() {
-              _translation = "No audio data received";
+              _translation = "Empty audio data received";
             });
           }
-        } catch (e) {
-          print('Error decoding Eleven Labs WebSocket message: $e');
+        } else {
+          print('No audio data found in the response');
+          setState(() {
+            _translation = "No audio data received";
+          });
         }
-      },
-      onError: (error) {
-        print('Eleven Labs WebSocket error: $error');
-      },
-      onDone: () {
-        print('Eleven Labs WebSocket connection closed');
-      },
-    );
-  }
-
-  void _sendTextToElevenLabs(String text) {
-    if (_elevenLabsChannel != null) {
-      // Add voice_id in the message
-      final inputMessage = {
-        
-        "text": text, // The text you want converted to speech
-        "voice_settings": {
-          "stability": 0.5,
-          "similarity_boost": 0.8,
-        },
-        "generation_config": {
-    "chunk_length_schedule": [120, 160, 250, 290]
-  },  
-      };
-
-      try {
-        _elevenLabsChannel!.sink.add(jsonEncode(inputMessage));
-        print('Sent to Eleven Labs WebSocket: ${jsonEncode(inputMessage)}');
       } catch (e) {
-        print('Error sending to Eleven Labs WebSocket: $e');
+        print('Error decoding Eleven Labs WebSocket message: $e');
       }
-    } else {
-      print('Eleven Labs WebSocket is not initialized');
-    }
-  }
+    },
+    onError: (error) {
+      print('Eleven Labs WebSocket error: $error');
+    },
+    onDone: () {
+      print('Eleven Labs WebSocket connection closed');
+    },
+  );
+}
 
-  void _playAudioChunk(Uint8List audioData) async {
-    await _audioPlayer.play(BytesSource(audioData));
-    print('Playing audio chunk');
+void _sendTextToElevenLabs(String text) {
+  if (_elevenLabsChannel != null) {
+    // Add voice_id in the message
+    final inputMessage = {
+      "text": text, // The text you want converted to speech
+      "voice_settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.8,
+      },
+      "generation_config": {
+        "chunk_length_schedule": [120, 160, 250, 290]
+      },
+      "xi_api_key": ''  
+    };
+
+    try {
+      _elevenLabsChannel!.sink.add(jsonEncode(inputMessage));
+      print('Sent to Eleven Labs WebSocket: ${jsonEncode(inputMessage)}');
+    } catch (e) {
+      print('Error sending to Eleven Labs WebSocket: $e');
+    }
+  } else {
+    print('Eleven Labs WebSocket is not initialized');
   }
+}
+
+void _playAudioChunk(Uint8List audioData) async {
+  print('Playing audio chunk, length: ${audioData.length}');
+  await _audioPlayer.play(BytesSource(audioData));
+  print('Finished playing audio chunk');
+}
+
 
   void _captureAndSendFrame() async {
     if (_controller != null && _controller!.value.isInitialized) {
