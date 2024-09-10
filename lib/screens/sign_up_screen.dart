@@ -72,14 +72,6 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Sign Up',
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -93,6 +85,17 @@ class _SignUpPageState extends State<SignUpPage> {
               Image.asset(
                 'assets/images/logo.png', 
                 height: 150,
+              ),
+              const SizedBox(height: 20),
+              const Align(
+                alignment: Alignment.center,
+                child:  Text(
+          'Sign Up',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
               ),
               const SizedBox(height: 20),
               TextFormField(
