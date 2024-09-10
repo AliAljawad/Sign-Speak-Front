@@ -139,19 +139,6 @@ class _LoginPageState extends State<LoginPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Forgot password?',
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
               const SizedBox(height: 5),
               ElevatedButton(
                 onPressed: _isLoading ? null : _login,
