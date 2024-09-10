@@ -69,14 +69,6 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Login',
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -95,14 +87,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                alignment: Alignment.center,
+                child:  Text(
+          'Login',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
               ),
               const SizedBox(height: 20),
               TextFormField(
