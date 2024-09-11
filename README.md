@@ -10,11 +10,19 @@
 > SignSpeak aims to bridge the communication gap by providing a user-friendly platform that translates sign language into spoken words in real-time. We believe in enhancing accessibility and ensuring effective communication.
 
 ### User Stories
-- As a user, I want to sign into the app, so I can start translating my signs into speech.
-- As a user, I want to customize my settings, so I can choose my preferred language and voice.
-- As a user, I want to receive real-time notifications, so I can stay informed about my translations.
+
+#### For Regular Users
+- As a regular user, I want to sign into the app, so I can start translating my signs into speech.
+- As a regular user, I want to upload videos and images for translation, so I can get speech output from my saved content.
+- As a regular user, I want to use real-time translation with my camera, so I can see immediate speech output from my sign language.
+
+#### For Mute Users
+- As a mute user, I want to sign into the app, so I can start translating my signs into speech.
+- As a mute user, I want to use the app for real-time translation with my camera, so I can see immediate speech output from my sign language.
+- As a mute user, I want to access a history of my translations, so I can review and refer back to previous translations.
 
 <br><br>
+
 <!-- Tech stack -->
 <img src="./readme/title3.svg"/>
 
