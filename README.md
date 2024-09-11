@@ -18,16 +18,18 @@
 <!-- Tech stack -->
 <img src="./readme/title3.svg"/>
 
-###  SignSpeak is built using the following technologies:
+### SignSpeak is built using the following technologies:
 
-    - This project leverages the [Flutter app development framework](https://flutter.dev/), a versatile platform enabling cross-platform app development with a single codebase for mobile, desktop, and web applications.
-    - For data persistence, the app utilizes the [Hive](https://hivedb.dev/) package, allowing the creation of a custom storage schema and saving data to a local database.
-    - To handle local push notifications, the app employs the [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) package, which is compatible with Android, iOS, and macOS.
-    - 🚨 Note: Notifications on macOS are currently non-functional due to a known issue we're actively addressing!
-    - The app features the ["Work Sans"](https://fonts.google.com/specimen/Work+Sans) font as its primary typeface and follows material design guidelines throughout its user interface.
-
-
+- This project leverages the [Flutter app development framework](https://flutter.dev/), a versatile platform enabling cross-platform app development with a single codebase for mobile, desktop, and web applications.
+- For data persistence, the app uses **MySQL**, a widely-used open-source relational database management system.
+- The app follows material design guidelines throughout its user interface, ensuring a modern and consistent look.
+- For backend services, **SignSpeak** integrates with:
+  - **Laravel**: A PHP framework for handling the backend API and managing the database.
+  - **Python**: Running the machine learning models for real-time sign language translation via WebSocket and image/video uploads.
+  - **Uvicorn**: Utilized to run the ASGI server for handling Python-based endpoints efficiently.
+  
 <br><br>
+
 <!-- Database Design -->
 <img src="./readme/title5.svg"/>
 
