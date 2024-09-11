@@ -156,9 +156,10 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     try {
       final response = await request.send();
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = await response.stream.bytesToString();
         final decodedResponse = jsonDecode(responseData);
+        print(response.statusCode);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(decodedResponse['message'])),
