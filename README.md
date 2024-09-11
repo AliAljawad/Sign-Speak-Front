@@ -88,26 +88,50 @@
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Ensure that you have the following installed on your machine:
+- **Flutter**: [Install Flutter](https://flutter.dev/docs/get-started/install)
+- **Laravel**: [Install Laravel](https://laravel.com/docs/installation)
+- **Python**: [Download Python](https://www.python.org/downloads/)
+- **Uvicorn**: For running the Python server (installed via pip)
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [example](https://example.com)
-2. Clone the repo
-   git clone [github](https://github.com/your_username_/Project-Name.git)
-3. Install NPM packages
-   ```sh
-   npm install
+#### 1. Clone the repository
+   ```bash
+   git clone https://github.com/AliAljawad/SignSpeak.git
+   cd sign-speak
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+#### 2. Flutter Frontend Setup
+  - Open your Android emulator.
+  - Navigate to the Flutter project directory.
+  - Run the following commands:
+   ```bash
+      flutter pub get
+      flutter run
    ```
+   This will start the Flutter frontend on your emulator.
+#### 3. Laravel Backend Setup
+- Navigate to the Flutter project directory.
+- Run the following command to serve the backend:
+```bash
+   php artisan serve
+   ```
+#### 4. Python Model and WebSocket Setup
+- Navigate to the Python model directory:
+```bash
+   cd SignDetectionModel
+   ```
+- Install the required dependencies:
+```bash
+   pip install -r requirements.txt
+   ```
+- To start the WebSocket server for real-time translation, run:
+```bash
+   python ./webSocket_classifier.py
+```
+- To start the server that handles uploaded images and videos, run:
+```bash
+   python -m uvicorn uploaded_files_classifier:app --reload --host 0.0.0.0 --port 8001
+```
 
-Now, you should be able to run SignSpeak locally and explore its features.
+Now you should be able to run the SignSpeak app locally, with real-time translation and video/image upload features.
