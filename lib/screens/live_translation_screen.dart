@@ -17,34 +17,11 @@ class LiveTranslationScreen extends StatefulWidget {
 class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   CameraController? _controller;
   WebSocketChannel? _webSocketChannel;
-  WebSocketChannel? _elevenLabsChannel;
   bool _isTranslating = false;
   String _translation = '';
   bool _isCameraInitialized = false;
-  String _selectedVoice = 'Voice 1';
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-  Widget _buildVoiceDropdown() {
-    return DropdownButtonFormField<String>(
-      decoration: const InputDecoration(
-        labelText: 'Choose voice',
-        border: OutlineInputBorder(),
-      ),
-      value: _selectedVoice,
-      items: <String>['Voice 1', 'Voice 2', 'Voice 3']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      onChanged: (String? value) {
-        setState(() {
-          _selectedVoice = value!;
-        });
-      },
-    );
-  }
 
   @override
   void initState() {
@@ -75,9 +52,7 @@ void _connectToWebSocket() async {
       setState(() {
         _translation = event;
       });
-      if (_elevenLabsChannel != null) {
         _sendTextToElevenLabs(event);
-      }
     },
     onError: (error) {
       print('WebSocket error: $error');
@@ -87,31 +62,33 @@ void _connectToWebSocket() async {
     },
   );
 }
-void _sendTextToElevenLabs(String text) {
-  if (_elevenLabsChannel != null) {
-    // Add voice_id in the message
-    final inputMessage = {
-      "text": text, // The text you want converted to speech
-      "voice_settings": {
-        "stability": 0.5,
-        "similarity_boost": 0.8,
+void _sendTextToElevenLabs(String text) async {
+  try {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:8000/api/speech'),
+      headers: {
+        'Content-Type': 'application/json',
       },
-      "generation_config": {
-        "chunk_length_schedule": [120, 160, 250, 290]
-      },
-      "xi_api_key": ''  
-    };
-
-    try {
-      _elevenLabsChannel!.sink.add(jsonEncode(inputMessage));
-      print('Sent to Eleven Labs WebSocket: ${jsonEncode(inputMessage)}');
-    } catch (e) {
-      print('Error sending to Eleven Labs WebSocket: $e');
+      body: jsonEncode({
+        'text': text,
+      }),
+    );
+    print('Received response from Eleven Labs: ${response.body}');
+    print('Response headers: ${response.headers}');
+    
+    if (response.statusCode == 200) {
+      // The response contains the audio data in MP3 format
+      final Uint8List audioData = response.bodyBytes;
+      print('Received audio data, length: ${audioData.length}');
+      _playAudioChunk(audioData);
+    } else {
+      print('Failed to generate speech: ${response.statusCode}');
     }
-  } else {
-    print('Eleven Labs WebSocket is not initialized');
+  } catch (e) {
+    print('Error generating speech: $e');
   }
 }
+
 
 void _playAudioChunk(Uint8List audioData) async {
   print('Playing audio chunk, length: ${audioData.length}');
@@ -137,7 +114,7 @@ void _playAudioChunk(Uint8List audioData) async {
         } else {
           print('WebSocket is not initialized');
         }
-        await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(seconds: 1));
       }
     } else {
       print('Camera is not initialized');
@@ -147,7 +124,6 @@ void _playAudioChunk(Uint8List audioData) async {
   @override
   void dispose() {
     _webSocketChannel?.sink.close();
-    _elevenLabsChannel?.sink.close();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -191,8 +167,6 @@ void _playAudioChunk(Uint8List audioData) async {
               ),
             ),
             const SizedBox(height: 20),
-            _buildVoiceDropdown(),
-            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -200,11 +174,9 @@ void _playAudioChunk(Uint8List audioData) async {
                 });
                 if (_isTranslating) {
                   _connectToWebSocket();
-                  _connectToElevenLabsWebSocket();
                   _captureAndSendFrame();
                 } else {
                   _webSocketChannel?.sink.close();
-                  _elevenLabsChannel?.sink.close();
                 }
               },
               style: ElevatedButton.styleFrom(
