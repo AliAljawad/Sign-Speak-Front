@@ -87,60 +87,6 @@ void _connectToWebSocket() async {
     },
   );
 }
-
-void _connectToElevenLabsWebSocket() {
-  const voiceId = 'cOgU50TlfkZIWfqK3ckV'; 
-  const uri = 'wss://api.elevenlabs.io/v1/text-to-speech/$voiceId/stream-input?model_id=eleven_turbo_v2_5';
-
-  final webSocketChannel = WebSocketChannel.connect(Uri.parse(uri));
-  setState(() {
-    _elevenLabsChannel = webSocketChannel;
-  });
-  print('Connected to Eleven Labs WebSocket');
-
-  // Send API key in the first message
-  final firstMessage = {
-    "xi_api_key": '', // Replace with your Eleven Labs API key
-  };
-
-  _elevenLabsChannel!.sink.add(jsonEncode(firstMessage)); // Send the API key in the first message
-
-  webSocketChannel.stream.listen(
-    (event) {
-      print('Received from Eleven Labs WebSocket: $event');
-      try {
-        final data = jsonDecode(event);
-        print('this is the data recieved from eleven labs $data');
-        if (data.containsKey('audio') && data['audio'] != null) {
-          final audioData = base64Decode(data['audio']);
-          print('Received audio data, length: ${audioData.length}');
-          if (audioData.isNotEmpty) {
-            _playAudioChunk(audioData); // Play the received audio
-          } else {
-            print('Received empty audio data');
-            setState(() {
-              _translation = "Empty audio data received";
-            });
-          }
-        } else {
-          print('No audio data found in the response');
-          setState(() {
-            _translation = "No audio data received";
-          });
-        }
-      } catch (e) {
-        print('Error decoding Eleven Labs WebSocket message: $e');
-      }
-    },
-    onError: (error) {
-      print('Eleven Labs WebSocket error: $error');
-    },
-    onDone: () {
-      print('Eleven Labs WebSocket connection closed');
-    },
-  );
-}
-
 void _sendTextToElevenLabs(String text) {
   if (_elevenLabsChannel != null) {
     // Add voice_id in the message
