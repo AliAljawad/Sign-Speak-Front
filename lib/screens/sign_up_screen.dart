@@ -19,7 +19,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   String? _selectedUserType;
-  final List<String> _userTypes = ['regular', 'non-verbal'];
+  final List<String> _userTypes = ['regular', 'mute'];
 
   void _registerUser() async {
   if (_formKey.currentState!.validate()) {
