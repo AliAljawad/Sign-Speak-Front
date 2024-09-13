@@ -39,10 +39,12 @@ class _LoginPageState extends State<LoginPage> {
 
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
+          print(data);
           final token = data['authorisation']['token']; // Assuming the token is in the 'token' key
-
+          final role=data['user']['user_type'];
           // Store the token securely
           await _storage.write(key: 'jwt_token', value: token);
+          await _storage.write(key: 'role', value: role);
           Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => const MyBottomNavigationBar()),
 );
