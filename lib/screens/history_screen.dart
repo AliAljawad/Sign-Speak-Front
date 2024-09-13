@@ -103,9 +103,14 @@ class _HistoryPageState extends State<HistoryPage> {
                             ),
                           )
                         else if (entry['input_type'] == 'video')
-                          VideoWidget(
+                        Center(
+                            child: SizedBox(
+                              width: 200, // Set the desired width
+                              height: 200, // Set the desired height
+                          child: VideoWidget(
                               videoUrl:
-                                  'http://10.0.2.2:8000/storage/${entry['input_data']}'),
+                                  'http://10.0.2.2:8000/storage/${entry['input_data']}'),)
+                                  ),
                         const SizedBox(height: 10),
                         Text(
                           'Translated Text: ${entry['translated_text'] ?? 'No translation'}',
