@@ -125,7 +125,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.videocam),
-            label: "Media",
+            label: "Media Translation",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
