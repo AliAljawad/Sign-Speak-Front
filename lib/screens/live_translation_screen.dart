@@ -21,7 +21,9 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   String _translation = '';
   bool _isCameraInitialized = false;
   final AudioPlayer _audioPlayer = AudioPlayer();
-
+  int _lineCount = 0;
+  final int _maxLines = 3;
+  final int _lineHeight = 24; // Approximate line height, adjust as needed
 
   @override
   void initState() {
@@ -39,63 +41,62 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
     });
   }
 
-void _connectToWebSocket() async {
-  const url = 'ws://192.168.0.111:8002'; // Your server WebSocket URL
-  final webSocketChannel = WebSocketChannel.connect(Uri.parse(url));
-  setState(() {
-    _webSocketChannel = webSocketChannel;
-  });
+  void _connectToWebSocket() async {
+    const url = 'ws://192.168.0.111:8002'; // Your server WebSocket URL
+    final webSocketChannel = WebSocketChannel.connect(Uri.parse(url));
+    setState(() {
+      _webSocketChannel = webSocketChannel;
+    });
 
-  webSocketChannel.stream.listen(
-    (event) {
-      print('Received from WebSocket: $event');
-      setState(() {
-        _translation = event;
-      });
+    webSocketChannel.stream.listen(
+      (event) {
+        print('Received from WebSocket: $event');
+        setState(() {
+          _updateTranslation(event);
+        });
         _sendTextToElevenLabs(event);
-    },
-    onError: (error) {
-      print('WebSocket error: $error');
-    },
-    onDone: () {
-      print('WebSocket connection closed');
-    },
-  );
-}
-void _sendTextToElevenLabs(String text) async {
-  try {
-    final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/api/speech'),
-      headers: {
-        'Content-Type': 'application/json',
       },
-      body: jsonEncode({
-        'text': text,
-      }),
+      onError: (error) {
+        print('WebSocket error: $error');
+      },
+      onDone: () {
+        print('WebSocket connection closed');
+      },
     );
-    print('Received response from Eleven Labs: ${response.body}');
-    print('Response headers: ${response.headers}');
-    
-    if (response.statusCode == 200) {
-      // The response contains the audio data in MP3 format
-      final Uint8List audioData = response.bodyBytes;
-      print('Received audio data, length: ${audioData.length}');
-      _playAudioChunk(audioData);
-    } else {
-      print('Failed to generate speech: ${response.statusCode}');
-    }
-  } catch (e) {
-    print('Error generating speech: $e');
   }
-}
 
+  void _sendTextToElevenLabs(String text) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:8000/api/speech'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'text': text,
+        }),
+      );
+      print('Received response from Eleven Labs: ${response.body}');
+      print('Response headers: ${response.headers}');
+      
+      if (response.statusCode == 200) {
+        // The response contains the audio data in MP3 format
+        final Uint8List audioData = response.bodyBytes;
+        print('Received audio data, length: ${audioData.length}');
+        _playAudioChunk(audioData);
+      } else {
+        print('Failed to generate speech: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error generating speech: $e');
+    }
+  }
 
-void _playAudioChunk(Uint8List audioData) async {
-  print('Playing audio chunk, length: ${audioData.length}');
-  await _audioPlayer.play(BytesSource(audioData));
-  print('Finished playing audio chunk');
-}
-
+  void _playAudioChunk(Uint8List audioData) async {
+    print('Playing audio chunk, length: ${audioData.length}');
+    await _audioPlayer.play(BytesSource(audioData));
+    print('Finished playing audio chunk');
+  }
 
   void _captureAndSendFrame() async {
     if (_controller != null && _controller!.value.isInitialized) {
@@ -119,6 +120,19 @@ void _playAudioChunk(Uint8List audioData) async {
     } else {
       print('Camera is not initialized');
     }
+  }
+
+  void _updateTranslation(String newText) {
+    setState(() {
+      _translation += ' $newText';
+      _lineCount = '\n$_translation'.split('\n').length;
+
+      if (_lineCount > _maxLines) {
+        // Reset the translation text if it exceeds the max lines
+        _translation = newText;
+        _lineCount = 1; // Start with the new text as the first line
+      }
+    });
   }
 
   @override
@@ -159,11 +173,18 @@ void _playAudioChunk(Uint8List audioData) async {
                     ),
             ),
             const SizedBox(height: 20),
-            Text(
-              'Translation: $_translation',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Text(
+                'Translation: $_translation',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.visible,
               ),
             ),
             const SizedBox(height: 20),
