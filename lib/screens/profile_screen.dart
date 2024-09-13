@@ -90,6 +90,7 @@ class ProfilePageState extends State<ProfilePage> {
 
     if (response.statusCode == 200) {
       await storage.delete(key: 'jwt_token');
+      await storage.delete(key: 'role');
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginPage()),
       );
