@@ -25,12 +25,10 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   @override
   void initState() {
     super.initState();
-    _checkUserRoleAndToken();
+    _checkUserRole();
   }
 
-  Future<void> _checkUserRoleAndToken() async {
-    // Retrieve the JWT token and user role from secure storage
-    _jwtToken = await _storage.read(key: 'jwt_token');
+  Future<void> _checkUserRole() async {
     _userRole = await _storage.read(key: 'role');
 
     if (_jwtToken == null || _userRole == null) {
