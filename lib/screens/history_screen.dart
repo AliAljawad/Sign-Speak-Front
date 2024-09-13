@@ -79,7 +79,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${entry['created_at'] ?? 'Unknown Date'}',
+                          _formatDate(entry['created_at']) ?? 'Unknown Date',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -113,7 +113,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           )),
                         const SizedBox(height: 10),
                         Text(
-                           'Translated Text: ${_formatTranslatedText(entry['translated_text']) ?? 'No translation'}',
+                          'Translated Text: ${_formatTranslatedText(entry['translated_text']) ?? 'No translation'}',
                           style: const TextStyle(fontSize: 14),
                         ),
                         const SizedBox(height: 10),
@@ -273,15 +273,37 @@ class _AudioWidgetState extends State<AudioWidget> {
       ],
     );
   }
-}String _formatTranslatedText(String? text) {
+}
+
+String _formatTranslatedText(String? text) {
   if (text == null || text.isEmpty) {
     return 'No translation';
   }
 
   // Remove brackets and commas, then join words with a space
   return text
-      .replaceAll('[', '')  // Remove opening brackets
-      .replaceAll(']', '')  // Remove closing brackets
-      .replaceAll(',', '')  // Remove commas
-      .trim();  // Trim any leading or trailing whitespace
+      .replaceAll('[', '') // Remove opening brackets
+      .replaceAll(']', '') // Remove closing brackets
+      .replaceAll(',', '') // Remove commas
+      .trim(); // Trim any leading or trailing whitespace
+}
+
+String _formatDate(String? dateString) {
+  if (dateString == null || dateString.isEmpty) {
+    return 'Unknown Date';
+  }
+
+  try {
+    // Parse the date string to a DateTime object
+    final DateTime dateTime = DateTime.parse(dateString);
+
+    // Format the DateTime object to a readable string
+    final String formattedDate =
+        '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+
+    return formattedDate;
+  } catch (e) {
+    // Handle parsing errors
+    return 'Invalid Date';
+  }
 }
