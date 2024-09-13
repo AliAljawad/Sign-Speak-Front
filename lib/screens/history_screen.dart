@@ -266,7 +266,7 @@ class _AudioWidgetState extends State<AudioWidget> {
     return Row(
       children: [
         IconButton(
-          icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+          icon: Icon(isPlaying ? Icons.volume_up : Icons.volume_up_outlined),
           onPressed: _togglePlayPause,
         ),
         Text(isPlaying ? 'Pause Audio' : 'Play Audio'),
