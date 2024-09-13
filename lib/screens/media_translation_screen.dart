@@ -258,6 +258,18 @@ Widget _buildMediaPreview() {
     }
   }
 }
+String _formatTranslatedText(String? text) {
+  if (text == null || text.isEmpty) {
+    return 'No translation';
+  }
+
+  // Remove brackets and commas, then join words with a space
+  return text
+      .replaceAll('[', '')  // Remove opening brackets
+      .replaceAll(']', '')  // Remove closing brackets
+      .replaceAll(',', '')  // Remove commas
+      .trim();  // Trim any leading or trailing whitespace
+}
 
 
   @override
@@ -284,7 +296,7 @@ Widget _buildMediaPreview() {
             const SizedBox(height: 20),
             Text(
               _translation.isNotEmpty
-                  ? _translation
+                  ? _formatTranslatedText(_translation)
                   : 'This is the translation of the picture or video you have uploaded',
               textAlign: TextAlign.center,
               style: const TextStyle(
