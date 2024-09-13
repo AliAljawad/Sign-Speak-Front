@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sign_speak/screens/history_screen.dart';
 import 'package:sign_speak/screens/live_translation_screen.dart';
+import 'package:sign_speak/screens/login_screen.dart';
 import 'package:sign_speak/screens/media_translation_screen.dart';
 import 'package:sign_speak/screens/profile_screen.dart';
 
@@ -32,7 +33,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
     if (_jwtToken == null || _userRole == null) {
       // Handle missing token/role, maybe redirect to login
-      
+      Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+);
       print('No token or user role found');
       // Redirect to login or show error message
     } else {
