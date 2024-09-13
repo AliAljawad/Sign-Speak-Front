@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:sign_speak/screens/history_screen.dart';
 import 'package:sign_speak/screens/live_translation_screen.dart';
 import 'package:sign_speak/screens/login_screen.dart';
@@ -23,7 +25,50 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   @override
   void initState() {
     super.initState();
-    _checkUserRoleAndToken();
+    _checkToken(context); // Check token validity before initializing pages
+  }
+
+  Future<bool> _checkToken(BuildContext context) async {
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'jwt_token');
+
+    if (token == null) {
+      // No token found, navigate to LoginPage
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+      return false;
+    }
+
+    final response = await http.get(
+      Uri.parse('http://10.0.2.2:8000/api/verify-token'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['valid']) {
+        // Token is valid, initialize the user role and pages
+        _checkUserRoleAndToken();
+        return true;
+      } else {
+        // Token is invalid, delete token and navigate to LoginPage
+        await storage.delete(key: 'jwt_token');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
+        return false;
+      }
+    } else {
+      // Error occurred, delete token and navigate to LoginPage
+      await storage.delete(key: 'jwt_token');
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+      return false;
+    }
   }
 
   Future<void> _checkUserRoleAndToken() async {
@@ -34,8 +79,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     if (_jwtToken == null || _userRole == null) {
       // Handle missing token/role, maybe redirect to login
       Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const LoginPage()),
-);
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
       print('No token or user role found');
       // Redirect to login or show error message
     } else {
@@ -48,14 +93,13 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       if (_userRole == 'regular') {
         _pages = [
           const LiveTranslationScreen(), // Home for regular user
-          const MediaTranslationPage(), 
+          const MediaTranslationPage(),
           const HistoryPage(),
           const ProfilePage(),
         ];
       } else if (_userRole == 'mute') {
         _pages = [
-          // Define non-verbal user-specific pages
-          const LiveTranslationScreen(), 
+          const LiveTranslationScreen(), // You can add specific non-verbal pages
           const HistoryPage(),
           const ProfilePage(),
         ];
