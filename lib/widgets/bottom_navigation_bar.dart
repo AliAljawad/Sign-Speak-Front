@@ -29,7 +29,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   Future<void> _checkUserRoleAndToken() async {
     // Retrieve the JWT token and user role from secure storage
     _jwtToken = await _storage.read(key: 'jwt_token');
-    _userRole = await _storage.read(key: 'user_role');
+    _userRole = await _storage.read(key: 'role');
 
     if (_jwtToken == null || _userRole == null) {
       // Handle missing token/role, maybe redirect to login
