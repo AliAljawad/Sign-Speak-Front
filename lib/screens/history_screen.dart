@@ -41,7 +41,7 @@ class _HistoryPageState extends State<HistoryPage> {
     if (response.statusCode == 200) {
       // Parse the response body as a list of translations
       List<dynamic> data = jsonDecode(response.body);
-      print( data);
+      print(data);
 
       // Return the list of translation maps
       return List<Map<String, dynamic>>.from(data);
@@ -87,12 +87,20 @@ class _HistoryPageState extends State<HistoryPage> {
                         ),
                         const SizedBox(height: 10),
                         if (entry['input_type'] == 'image')
-                          Image.network(
-                            'http://10.0.2.2:8000/storage/${entry['input_data']}',
-                            errorBuilder: (context, error, stackTrace) {
-                              return const Icon(Icons
-                                  .error); // Error handling for missing images
-                            },
+                          Center(
+                            child: SizedBox(
+                              width: 200, // Set the desired width
+                              height: 200, // Set the desired height
+                              child: Image.network(
+                                'http://10.0.2.2:8000/storage/${entry['input_data']}',
+                                fit: BoxFit
+                                    .cover, // Adjust the image to fit the box
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(Icons
+                                      .error); // Error handling for missing images
+                                },
+                              ),
+                            ),
                           )
                         else if (entry['input_type'] == 'video')
                           VideoWidget(
@@ -120,6 +128,7 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 }
+
 class VideoWidget extends StatefulWidget {
   final String videoUrl;
 
@@ -181,7 +190,6 @@ class _VideoWidgetState extends State<VideoWidget> {
             ),
           )
         : const Center(child: CircularProgressIndicator());
-        
   }
 }
 
@@ -205,25 +213,25 @@ class _AudioWidgetState extends State<AudioWidget> {
     _audioPlayer = AudioPlayer();
   }
 
-void _togglePlayPause() async {
-  try {
-    if (isPlaying) {
-      await _audioPlayer.pause();
-    } else {
-      await _audioPlayer.setSourceUrl(widget.audioUrl, mimeType: "audio/mpeg"); // MP3 mimetype
-      await _audioPlayer.play(UrlSource(widget.audioUrl));
+  void _togglePlayPause() async {
+    try {
+      if (isPlaying) {
+        await _audioPlayer.pause();
+      } else {
+        await _audioPlayer.setSourceUrl(widget.audioUrl,
+            mimeType: "audio/mpeg"); // MP3 mimetype
+        await _audioPlayer.play(UrlSource(widget.audioUrl));
+      }
+      setState(() {
+        isPlaying = !isPlaying;
+      });
+    } catch (e) {
+      print('Error playing audio: $e');
+      setState(() {
+        _isError = true;
+      });
     }
-    setState(() {
-      isPlaying = !isPlaying;
-    });
-  } catch (e) {
-    print('Error playing audio: $e');
-    setState(() {
-      _isError = true;
-    });
   }
-}
-
 
   @override
   void dispose() {
