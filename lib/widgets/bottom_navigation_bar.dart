@@ -30,7 +30,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   Future<void> _checkUserRole() async {
     _userRole = await _storage.read(key: 'role');
 
-    if ( _userRole == null) {
+    if (_userRole == null) {
       // Handle missing token/role, redirect to login
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -53,7 +53,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       } else if (_userRole == 'mute') {
         _pages = [
           // Define mute user-specific pages
-          const LiveTranslationScreen(),
+          const MediaTranslationPage(),
           const HistoryPage(),
           const ProfilePage(),
         ];
@@ -90,7 +90,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   }
 
   void _onItemTapped(int index) async {
-    bool isValid = await _checkToken(context); // Check the token on every navigation
+    bool isValid =
+        await _checkToken(context); // Check the token on every navigation
 
     if (isValid) {
       setState(() {
@@ -117,7 +118,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         unselectedItemColor: Colors.grey,
         showSelectedLabels: true,
         showUnselectedLabels: true,
-    items: _userRole == 'regular'
+        items: _userRole == 'regular'
             ? const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
@@ -138,8 +139,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
               ]
             : const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: "Home",
+                  icon: Icon(Icons.videocam),
+                  label: "Media Translation",
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.history),
