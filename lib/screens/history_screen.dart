@@ -103,17 +103,17 @@ class _HistoryPageState extends State<HistoryPage> {
                             ),
                           )
                         else if (entry['input_type'] == 'video')
-                        Center(
-                            child: SizedBox(
-                              width: 200, // Set the desired width
-                              height: 200, // Set the desired height
-                          child: VideoWidget(
-                              videoUrl:
-                                  'http://10.0.2.2:8000/storage/${entry['input_data']}'),)
-                                  ),
+                          Center(
+                              child: SizedBox(
+                            width: 200, // Set the desired width
+                            height: 200, // Set the desired height
+                            child: VideoWidget(
+                                videoUrl:
+                                    'http://10.0.2.2:8000/storage/${entry['input_data']}'),
+                          )),
                         const SizedBox(height: 10),
                         Text(
-                          'Translated Text: ${entry['translated_text'] ?? 'No translation'}',
+                          'Translated Text: ${entry['translated_text']?.replaceAll(RegExp(r'[\[\],]'), '').split('').join(' ') ?? 'No translation'}',
                           style: const TextStyle(fontSize: 14),
                         ),
                         const SizedBox(height: 10),
@@ -178,35 +178,37 @@ class _VideoWidgetState extends State<VideoWidget> {
       return const Center(child: Text('Failed to load video.'));
     }
 
-  return _controller.value.isInitialized
-      ? Stack(
-          children: [
-            AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controller),
-            ),
-            Center(
-              child: IconButton(
-                icon: Icon(
-                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                  color: Colors.white,
-                  size: 50,
-                ),
-                onPressed: () {
-                  setState(() {
-                    if (_controller.value.isPlaying) {
-                      _controller.pause();
-                    } else {
-                      _controller.play();
-                    }
-                  });
-                },
+    return _controller.value.isInitialized
+        ? Stack(
+            children: [
+              AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
               ),
-            ),
-          ],
-        )
-      : const Center(child: CircularProgressIndicator());
-}
+              Center(
+                child: IconButton(
+                  icon: Icon(
+                    _controller.value.isPlaying
+                        ? Icons.pause
+                        : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (_controller.value.isPlaying) {
+                        _controller.pause();
+                      } else {
+                        _controller.play();
+                      }
+                    });
+                  },
+                ),
+              ),
+            ],
+          )
+        : const Center(child: CircularProgressIndicator());
+  }
 }
 
 class AudioWidget extends StatefulWidget {
