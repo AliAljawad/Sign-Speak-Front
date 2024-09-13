@@ -191,32 +191,24 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     super.dispose();
   }
 
-  Widget _buildMediaPreview() {
-    if (_mediaFile == null) {
-      return const Text(
-        'No media selected',
-        style: TextStyle(fontSize: 16, color: Colors.black54),
-      );
-    }
+Widget _buildMediaPreview() {
+  if (_mediaFile == null) {
+    return const Text(
+      'No media selected',
+      style: TextStyle(fontSize: 16, color: Colors.black54),
+    );
+  }
 
-    if (_mediaFile!.path.endsWith('.mp4')) {
-      if (_videoController != null && _videoController!.value.isInitialized) {
-        // Check if video needs rotation
-        double videoAspectRatio = _videoController!.value.aspectRatio;
-        int? rotationDegrees = _videoController!.value.rotationCorrection;
+  if (_mediaFile!.path.endsWith('.mp4')) {
+    if (_videoController != null && _videoController!.value.isInitialized) {
+      // Check if video needs rotation
+      double videoAspectRatio = _videoController!.value.aspectRatio;
+      int? rotationDegrees = _videoController!.value.rotationCorrection;
 
-        // Use Transform to apply any needed rotation
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              if (_videoController!.value.isPlaying) {
-                _videoController!.pause();
-              } else {
-                _videoController!.play();
-              }
-            });
-          },
-          child: AspectRatio(
+      // Use Transform to apply any needed rotation
+      return Stack(
+        children: [
+          AspectRatio(
             aspectRatio: videoAspectRatio, // Ensure correct aspect ratio
             child: Transform.rotate(
               angle: rotationDegrees != null
@@ -225,26 +217,48 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
               child: VideoPlayer(_videoController!),
             ),
           ),
-        );
-      } else {
-        return const CircularProgressIndicator();
-      }
+          Center(
+            child: IconButton(
+              icon: Icon(
+                _videoController!.value.isPlaying
+                    ? Icons.pause
+                    : Icons.play_arrow,
+                color: Colors.white,
+                size: 50,
+              ),
+              onPressed: () {
+                setState(() {
+                  if (_videoController!.value.isPlaying) {
+                    _videoController!.pause();
+                  } else {
+                    _videoController!.play();
+                  }
+                });
+              },
+            ),
+          ),
+        ],
+      );
     } else {
-      try {
-        return Image.file(
-          File(_mediaFile!.path),
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-        );
-      } catch (e) {
-        return const Text(
-          'Error loading image',
-          style: TextStyle(fontSize: 16, color: Colors.red),
-        );
-      }
+      return const CircularProgressIndicator();
+    }
+  } else {
+    try {
+      return Image.file(
+        File(_mediaFile!.path),
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    } catch (e) {
+      return const Text(
+        'Error loading image',
+        style: TextStyle(fontSize: 16, color: Colors.red),
+      );
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
