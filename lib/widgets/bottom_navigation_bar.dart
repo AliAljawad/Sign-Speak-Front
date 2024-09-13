@@ -20,7 +20,6 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   List<Widget>? _pages;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   String? _userRole;
-  String? _jwtToken;
 
   @override
   void initState() {
@@ -31,12 +30,12 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   Future<void> _checkUserRole() async {
     _userRole = await _storage.read(key: 'role');
 
-    if (_jwtToken == null || _userRole == null) {
+    if ( _userRole == null) {
       // Handle missing token/role, redirect to login
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginPage()),
       );
-      print('No token or user role found');
+      print('user role found');
     } else {
       _initializePages();
     }
