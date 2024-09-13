@@ -7,6 +7,7 @@ import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:math';
 
 class MediaTranslationPage extends StatefulWidget {
   const MediaTranslationPage({super.key});
@@ -70,7 +71,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     );
   }
 
- Future<void> _translateMedia() async {
+  Future<void> _translateMedia() async {
     if (_mediaFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('No media file selected')),
@@ -110,7 +111,6 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       );
     }
   }
-
 
   Future<void> _sendTranslationForSpeech(String text) async {
     final uri = Uri.parse('http://10.0.2.2:8000/api/speech'); // Laravel speech generation API
@@ -200,12 +200,35 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     }
 
     if (_mediaFile!.path.endsWith('.mp4')) {
-      return _videoController != null && _videoController!.value.isInitialized
-          ? AspectRatio(
-              aspectRatio: _videoController!.value.aspectRatio,
+      if (_videoController != null && _videoController!.value.isInitialized) {
+        // Check if video needs rotation
+        double videoAspectRatio = _videoController!.value.aspectRatio;
+        int? rotationDegrees = _videoController!.value.rotationCorrection;
+
+        // Use Transform to apply any needed rotation
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              if (_videoController!.value.isPlaying) {
+                _videoController!.pause();
+              } else {
+                _videoController!.play();
+              }
+            });
+          },
+          child: AspectRatio(
+            aspectRatio: videoAspectRatio, // Ensure correct aspect ratio
+            child: Transform.rotate(
+              angle: rotationDegrees != null
+                  ? rotationDegrees * (pi / 180) // Convert degrees to radians
+                  : 0,
               child: VideoPlayer(_videoController!),
-            )
-          : const CircularProgressIndicator();
+            ),
+          ),
+        );
+      } else {
+        return const CircularProgressIndicator();
+      }
     } else {
       try {
         return Image.file(
