@@ -178,24 +178,35 @@ class _VideoWidgetState extends State<VideoWidget> {
       return const Center(child: Text('Failed to load video.'));
     }
 
-    return _controller.value.isInitialized
-        ? AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (_controller.value.isPlaying) {
-                    _controller.pause();
-                  } else {
-                    _controller.play();
-                  }
-                });
-              },
+  return _controller.value.isInitialized
+      ? Stack(
+          children: [
+            AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
               child: VideoPlayer(_controller),
             ),
-          )
-        : const Center(child: CircularProgressIndicator());
-  }
+            Center(
+              child: IconButton(
+                icon: Icon(
+                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                  color: Colors.white,
+                  size: 50,
+                ),
+                onPressed: () {
+                  setState(() {
+                    if (_controller.value.isPlaying) {
+                      _controller.pause();
+                    } else {
+                      _controller.play();
+                    }
+                  });
+                },
+              ),
+            ),
+          ],
+        )
+      : const Center(child: CircularProgressIndicator());
+}
 }
 
 class AudioWidget extends StatefulWidget {
