@@ -1,12 +1,12 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:sign_speak/screens/history_screen.dart';
 import 'package:sign_speak/screens/live_translation_screen.dart';
 import 'package:sign_speak/screens/login_screen.dart';
 import 'package:sign_speak/screens/media_translation_screen.dart';
 import 'package:sign_speak/screens/profile_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MyBottomNavigationBar extends StatefulWidget {
   const MyBottomNavigationBar({super.key});
@@ -25,50 +25,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   @override
   void initState() {
     super.initState();
-    _checkToken(context); // Check token validity before initializing pages
-  }
-
-  Future<bool> _checkToken(BuildContext context) async {
-    const storage = FlutterSecureStorage();
-    final token = await storage.read(key: 'jwt_token');
-
-    if (token == null) {
-      // No token found, navigate to LoginPage
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
-      return false;
-    }
-
-    final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/verify-token'),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data['valid']) {
-        // Token is valid, initialize the user role and pages
-        _checkUserRoleAndToken();
-        return true;
-      } else {
-        // Token is invalid, delete token and navigate to LoginPage
-        await storage.delete(key: 'jwt_token');
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-        return false;
-      }
-    } else {
-      // Error occurred, delete token and navigate to LoginPage
-      await storage.delete(key: 'jwt_token');
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
-      return false;
-    }
+    _checkUserRoleAndToken();
   }
 
   Future<void> _checkUserRoleAndToken() async {
@@ -77,12 +34,11 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     _userRole = await _storage.read(key: 'role');
 
     if (_jwtToken == null || _userRole == null) {
-      // Handle missing token/role, maybe redirect to login
+      // Handle missing token/role, redirect to login
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginPage()),
       );
       print('No token or user role found');
-      // Redirect to login or show error message
     } else {
       _initializePages();
     }
@@ -99,7 +55,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         ];
       } else if (_userRole == 'mute') {
         _pages = [
-          const LiveTranslationScreen(), // You can add specific non-verbal pages
+          // Define mute user-specific pages
+          const LiveTranslationScreen(),
           const HistoryPage(),
           const ProfilePage(),
         ];
@@ -107,10 +64,47 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     });
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  Future<bool> _checkToken(BuildContext context) async {
+    final token = await _storage.read(key: 'jwt_token');
+
+    if (token == null) {
+      return false; // No token found, navigate to LoginPage
+    }
+
+    final response = await http.get(
+      Uri.parse('http://10.0.2.2:8000/api/verify-token'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['valid']) {
+        return true; // Token is valid
+      } else {
+        await _storage.delete(key: 'jwt_token');
+        return false; // Token is invalid
+      }
+    } else {
+      await _storage.delete(key: 'jwt_token');
+      return false; // Error occurred
+    }
+  }
+
+  void _onItemTapped(int index) async {
+    bool isValid = await _checkToken(context); // Check the token on every navigation
+
+    if (isValid) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    } else {
+      // If token is invalid, redirect to the LoginPage
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    }
   }
 
   @override
