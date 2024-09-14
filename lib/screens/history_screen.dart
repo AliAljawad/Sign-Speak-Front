@@ -178,36 +178,40 @@ class _VideoWidgetState extends State<VideoWidget> {
       return const Center(child: Text('Failed to load video.'));
     }
 
+    final quarterTurns = 45; // Define the value for quarterTurns
+    
     return _controller.value.isInitialized
-        ? Stack(
-            children: [
-              AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              ),
-              Center(
-                child: IconButton(
-                  icon: Icon(
-                    _controller.value.isPlaying
-                        ? Icons.pause
-                        : Icons.play_arrow,
-                    color: Colors.white,
-                    size: 50,
+            ? Stack(
+                children: [
+                  RotatedBox(quarterTurns: quarterTurns,
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio*2,
+                      child: VideoPlayer(_controller),
+                    ),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      if (_controller.value.isPlaying) {
-                        _controller.pause();
-                      } else {
-                        _controller.play();
-                      }
-                    });
-                  },
-                ),
-              ),
-            ],
-          )
-        : const Center(child: CircularProgressIndicator());
+                  Center(
+                    child: IconButton(
+                      icon: Icon(
+                        _controller.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: Colors.white,
+                        size: 50,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (_controller.value.isPlaying) {
+                            _controller.pause();
+                          } else {
+                            _controller.play();
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              )
+            : const Center(child: CircularProgressIndicator());
   }
 }
 
