@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
@@ -22,6 +23,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   String _translation = '';
   final AudioPlayer _audioPlayer = AudioPlayer(); // Audio player instance
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final baseUrl = dotenv.env['BASE_URL'];
 
   Future<void> _pickMedia() async {
     final ImagePicker picker = ImagePicker();
@@ -80,8 +82,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     }
 
     final uri = Uri.parse(_mediaFile!.path.endsWith('.mp4')
-        ? 'http://10.0.2.2:8001/predict_video' // API for video
-        : 'http://10.0.2.2:8001/predict_image'); // API for image
+        ? 'http://192.168.0.111:8001/predict_video' // API for video
+        : 'http://192.168.0.111:8001/predict_image'); // API for image
 
     final request = http.MultipartRequest('POST', uri)
       ..files.add(await http.MultipartFile.fromPath('file', _mediaFile!.path));
@@ -113,7 +115,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   }
 
   Future<void> _sendTranslationForSpeech(String text) async {
-    final uri = Uri.parse('http://10.0.2.2:8000/api/speech'); // Laravel speech generation API
+    final uri = Uri.parse('$baseUrl/api/speech'); // Laravel speech generation API
 
     try {
       final response = await http.post(
@@ -144,7 +146,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
 
   Future<void> _saveTranslation(String text, String audioPath) async {
     final jwtToken = await _storage.read(key: 'jwt_token');
-    final uri = Uri.parse('http://10.0.2.2:8000/api/translations'); // Laravel store translation API
+    final uri = Uri.parse('$baseUrl/api/translations'); // Laravel store translation API
 
     final request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $jwtToken'

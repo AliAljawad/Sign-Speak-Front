@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sign_speak/screens/history_screen.dart';
 import 'package:sign_speak/screens/live_translation_screen.dart';
@@ -63,13 +64,14 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
   Future<bool> _checkToken(BuildContext context) async {
     final token = await _storage.read(key: 'jwt_token');
+    final baseUrl = dotenv.env['BASE_URL'];
 
     if (token == null) {
       return false; // No token found, navigate to LoginPage
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/verify-token'),
+      Uri.parse('$baseUrl/api/verify-token'),
       headers: {
         'Authorization': 'Bearer $token',
       },

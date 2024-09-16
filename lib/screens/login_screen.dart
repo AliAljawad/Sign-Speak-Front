@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sign_speak/screens/sign_up_screen.dart';
 import 'package:sign_speak/widgets/bottom_navigation_bar.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final _storage = const FlutterSecureStorage();
   bool _isLoading = false;
+  final baseUrl = dotenv.env['BASE_URL'];
 
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
@@ -27,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
 
       try {
         final response = await http.post(
-          Uri.parse('http://10.0.2.2:8000/api/login'),
+          Uri.parse('$baseUrl/api/login'),
           headers: {
             'Content-Type': 'application/json',
           },

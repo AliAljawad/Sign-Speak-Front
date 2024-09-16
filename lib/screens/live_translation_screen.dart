@@ -2,12 +2,14 @@ import 'dart:typed_data';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/http.dart' as http;
+
 
 class LiveTranslationScreen extends StatefulWidget {
   const LiveTranslationScreen({super.key});
@@ -28,6 +30,7 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   final int _lineHeight = 24; // Approximate line height, adjust as needed
   bool _isRecording = false;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final baseUrl = dotenv.env['BASE_URL'];
 
 
   @override
@@ -73,7 +76,7 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   void _sendTextToElevenLabs(String text) async {
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/speech'),
+        Uri.parse('$baseUrl/api/speech'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -143,7 +146,7 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   final jwtToken = await _storage.read(key: 'jwt_token');
   try {
     var request = http.MultipartRequest(
-      'POST', Uri.parse('http://10.0.2.2:8000/api/translations'),);
+      'POST', Uri.parse('$baseUrl/api/translations'),);
       request.headers['Authorization'] = 'Bearer $jwtToken';
     // Add the video file
     request.files.add(await http.MultipartFile.fromPath(

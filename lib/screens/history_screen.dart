@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 import 'package:audioplayers/audioplayers.dart';
@@ -16,6 +17,8 @@ class _HistoryPageState extends State<HistoryPage> {
   late Future<List<Map<String, dynamic>>> _translationHistory;
 
   final storage = const FlutterSecureStorage();
+  final baseUrl = dotenv.env['BASE_URL'];
+
 
   @override
   void initState() {
@@ -28,7 +31,7 @@ class _HistoryPageState extends State<HistoryPage> {
     final token = await storage.read(key: 'jwt_token');
 
     // Define the API endpoint
-    final url = Uri.parse('http://10.0.2.2:8000/api/get-translations');
+    final url = Uri.parse('$baseUrl/api/get-translations');
 
     // Send GET request with the JWT token in the Authorization header
     final response = await http.get(
@@ -92,7 +95,7 @@ class _HistoryPageState extends State<HistoryPage> {
                               width: 200, // Set the desired width
                               height: 200, // Set the desired height
                               child: Image.network(
-                                'http://10.0.2.2:8000/storage/${entry['input_data']}',
+                                '$baseUrl/storage/${entry['input_data']}',
                                 fit: BoxFit
                                     .cover, // Adjust the image to fit the box
                                 errorBuilder: (context, error, stackTrace) {
@@ -108,7 +111,7 @@ class _HistoryPageState extends State<HistoryPage> {
                               width: 200, 
                               height: 200, 
                               child: VideoWidget(
-                                videoUrl: 'http://10.0.2.2:8000/storage/${entry['input_data']}',
+                                videoUrl: '$baseUrl/storage/${entry['input_data']}',
                               ),
                             ),
                           ),
@@ -121,7 +124,7 @@ class _HistoryPageState extends State<HistoryPage> {
                         if (entry['translated_audio'] != null)
                           AudioWidget(
                               audioUrl:
-                                  'http://10.0.2.2:8000/storage/${entry['translated_audio']}'),
+                                  '$baseUrl/storage/${entry['translated_audio']}'),
                       ],
                     ),
                   ),

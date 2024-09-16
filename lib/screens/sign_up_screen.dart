@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -20,7 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
       TextEditingController();
   String? _selectedUserType;
   final List<String> _userTypes = ['regular', 'mute'];
-
+final baseUrl = dotenv.env['BASE_URL'];
   void _registerUser() async {
   if (_formKey.currentState!.validate()) {
     if (_selectedUserType == null) {
@@ -39,7 +40,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/register'), // Replace with your API endpoint
+        Uri.parse('$baseUrl/api/register'), // Replace with your API endpoint
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

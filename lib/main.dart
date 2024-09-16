@@ -5,10 +5,15 @@ import 'package:sign_speak/widgets/bottom_navigation_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+
+Future<void> main() async {
+  await dotenv.load(); // Make sure to await the load method
+  print('BASE_URL: ${dotenv.env['BASE_URL']}');
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -39,13 +44,14 @@ class MyApp extends StatelessWidget {
 Future<bool> _checkToken(BuildContext context) async {
   const storage = FlutterSecureStorage();
   final token = await storage.read(key: 'jwt_token');
+  final baseUrl = dotenv.env['BASE_URL'];
 
   if (token == null) {
     return false; // No token found, navigate to LoginPage
   }
 
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:8000/api/verify-token'),
+    Uri.parse('$baseUrl/api/verify-token'),
     headers: {
       'Authorization': 'Bearer $token',
     },

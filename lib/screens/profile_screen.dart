@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -23,6 +24,7 @@ class ProfilePageState extends State<ProfilePage> {
   bool _isUserLoading = true;
   File? _profileImage;
   String _profileImageUrl = '';
+   final baseUrl = dotenv.env['BASE_URL'];
 
   @override
   void initState() {
@@ -46,7 +48,7 @@ class ProfilePageState extends State<ProfilePage> {
     }
 
     final response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/getUser'),
+      Uri.parse('$baseUrl/api/getUser'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -82,7 +84,7 @@ class ProfilePageState extends State<ProfilePage> {
     }
 
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/api/logout'),
+      Uri.parse('$baseUrl/api/logout'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -114,7 +116,7 @@ class ProfilePageState extends State<ProfilePage> {
     }
 
     final putResponse = await http.put(
-      Uri.parse('http://10.0.2.2:8000/api/updateUser'),
+      Uri.parse('$baseUrl/api/updateUser'),
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
@@ -136,7 +138,7 @@ class ProfilePageState extends State<ProfilePage> {
     if (_profileImage != null) {
       final postRequest = http.MultipartRequest(
         'POST',
-        Uri.parse('http://10.0.2.2:8000/api/upload-image'),
+        Uri.parse('$baseUrl/api/upload-image'),
       );
 
       postRequest.headers['Authorization'] = 'Bearer $token';
@@ -212,7 +214,7 @@ class ProfilePageState extends State<ProfilePage> {
   backgroundImage: _profileImage != null
       ? FileImage(_profileImage!)
       : _profileImageUrl.isNotEmpty
-          ? NetworkImage('http://10.0.2.2:8000/storage/$_profileImageUrl')
+          ? NetworkImage('$baseUrl/storage/$_profileImageUrl')
           : const AssetImage('assets/images/default_image.jpg') as ImageProvider,
   child: _profileImage == null && _profileImageUrl.isEmpty
       ? const Icon(Icons.camera_alt, size: 50, color: Colors.white)
