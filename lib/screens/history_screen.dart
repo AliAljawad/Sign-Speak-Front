@@ -79,7 +79,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _formatDate(entry['created_at']) ?? 'Unknown Date',
+                          _formatDate(entry['created_at']),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -102,18 +102,19 @@ class _HistoryPageState extends State<HistoryPage> {
                               ),
                             ),
                           )
-                        else if (entry['input_type'] == 'video')
+                        else if (entry['input_type'] == 'video' || entry['input_type'] == 'live')
                           Center(
-                              child: SizedBox(
-                            width: 200, // Set the desired width
-                            height: 200, // Set the desired height
-                            child: VideoWidget(
-                                videoUrl:
-                                    'http://10.0.2.2:8000/storage/${entry['input_data']}'),
-                          )),
+                            child: SizedBox(
+                              width: 200, 
+                              height: 200, 
+                              child: VideoWidget(
+                                videoUrl: 'http://10.0.2.2:8000/storage/${entry['input_data']}',
+                              ),
+                            ),
+                          ),
                         const SizedBox(height: 10),
                         Text(
-                          'Translated Text: ${_formatTranslatedText(entry['translated_text']) ?? 'No translation'}',
+                          'Translated Text: ${_formatTranslatedText(entry['translated_text'])}',
                           style: const TextStyle(fontSize: 14),
                         ),
                         const SizedBox(height: 10),
