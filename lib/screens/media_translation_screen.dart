@@ -198,8 +198,15 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     }
 
     if (_mediaFile!.path.endsWith('.mp4')) {
-      return VideoWidget(videoUrl: _mediaFile!.path); // Using VideoWidget
-    } else {
+  return Center(
+                            child: SizedBox(
+                              width: 200, 
+                              height: 200,
+    child: VideoWidget(videoUrl: _mediaFile!.path), // Using VideoWidget
+  ),
+  );
+}
+else {
       try {
         return Image.file(
           File(_mediaFile!.path),
