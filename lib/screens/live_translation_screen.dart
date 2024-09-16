@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +26,9 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   int _lineCount = 0;
   final int _maxLines = 3;
   final int _lineHeight = 24; // Approximate line height, adjust as needed
+  bool _isRecording = false;
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
 
   @override
   void initState() {
@@ -134,6 +139,32 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
       }
     });
   }
+  void _sendVideoToApi(XFile videoFile) async {
+  final jwtToken = await _storage.read(key: 'jwt_token');
+  try {
+    var request = http.MultipartRequest(
+      'POST', Uri.parse('http://10.0.2.2:8000/api/translations'),);
+      request.headers['Authorization'] = 'Bearer $jwtToken';
+    // Add the video file
+    request.files.add(await http.MultipartFile.fromPath(
+      'input_data', videoFile.path,
+      contentType: MediaType('video', 'mp4'),
+    ));
+
+    // Add translated text
+    request.fields['translated_text'] = _translation;
+    request.fields['input_type'] = 'live';
+    var response = await request.send();
+    if (response.statusCode == 201) {
+      print('Video and translation sent successfully');
+    } else {
+      print('Failed to send video and translation');
+    }
+  } catch (e) {
+    print('Error sending video: $e');
+  }
+}
+
 
   @override
   void dispose() {
@@ -187,6 +218,44 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
                 overflow: TextOverflow.visible,
               ),
             ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+  onPressed: () async {
+    if (_controller != null && _controller!.value.isInitialized) {
+      if (!_controller!.value.isRecordingVideo) {
+        // Start recording video
+        await _controller!.startVideoRecording();
+        setState(() {
+          _isRecording = true;
+        });
+      } else {
+        // Stop recording and save the file
+        final XFile videoFile = await _controller!.stopVideoRecording();
+        setState(() {
+          _isRecording = false;
+        });
+        // Send the video file to the API along with the translation
+        _sendVideoToApi(videoFile);
+      }
+    }
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.blue,
+    padding: const EdgeInsets.symmetric(vertical: 15),
+    minimumSize: const Size(double.infinity, 0),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+  ),
+  child: Text(
+    _isRecording ? 'Stop Recording' : 'Record',
+    style: const TextStyle(
+      color: Colors.white,
+      fontSize: 16,
+    ),
+  ),
+),
+
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
