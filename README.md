@@ -37,6 +37,19 @@
   - **Uvicorn**: Utilized to run the ASGI server for handling Python-based endpoints efficiently.
   
 <br><br>
+<!-- UI UX -->
+<img src="./readme/title4.svg"/>
+
+
+> We designed SignSpeak using wireframes and mockups, iterating on the design until we reached the ideal layout for easy navigation and a seamless user experience.
+- Project Figma design [figma](https://www.figma.com/file/LsuOx5Wnh5YTGSEtrgvz4l/Purrfect-Pals?type=design&node-id=257%3A79&mode=design&t=adzbABt5hbb91ucZ-1)
+
+
+### Mockups
+| Home screen  | Menu Screen | Order Screen |
+| ---| ---| ---|
+| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
+<br><br>
 
 <!-- Database Design -->
 <img src="./readme/title5.svg"/>
