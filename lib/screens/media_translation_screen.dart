@@ -21,7 +21,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   XFile? _mediaFile;
   VideoPlayerController? _videoController;
   String _translation = '';
-  final AudioPlayer _audioPlayer = AudioPlayer(); // Audio player instance
+  final AudioPlayer _audioPlayer = AudioPlayer();
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final baseUrl = dotenv.env['BASE_URL'];
 
@@ -82,8 +82,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     }
 
     final uri = Uri.parse(_mediaFile!.path.endsWith('.mp4')
-        ? 'http://192.168.0.111:8001/predict_video' // API for video
-        : 'http://192.168.0.111:8001/predict_image'); // API for image
+        ? 'http://192.168.0.111:8001/predict_video'
+        : 'http://192.168.0.111:8001/predict_image');
 
     final request = http.MultipartRequest('POST', uri)
       ..files.add(await http.MultipartFile.fromPath('file', _mediaFile!.path));
@@ -100,7 +100,6 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
           _translation = decodedResponse['Translation'].toString();
         });
 
-        // Send the translation to the Laravel API to get audio
         _sendTranslationForSpeech(_translation);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -115,7 +114,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
   }
 
   Future<void> _sendTranslationForSpeech(String text) async {
-    final uri = Uri.parse('$baseUrl/api/speech'); // Laravel speech generation API
+    final uri = Uri.parse('$baseUrl/api/speech');
 
     try {
       final response = await http.post(
@@ -125,12 +124,10 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       );
 
       if (response.statusCode == 200) {
-        // Play the audio returned by the API
         final audioBytes = response.bodyBytes;
         final audioPath = await _saveAudioFile(audioBytes);
-        await _audioPlayer.play(DeviceFileSource(audioPath)); // Updated method to play local file
+        await _audioPlayer.play(DeviceFileSource(audioPath));
 
-        // Save the translation and media file information to the Laravel API
         _saveTranslation(text, audioPath);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -146,7 +143,7 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
 
   Future<void> _saveTranslation(String text, String audioPath) async {
     final jwtToken = await _storage.read(key: 'jwt_token');
-    final uri = Uri.parse('$baseUrl/api/translations'); // Laravel store translation API
+    final uri = Uri.parse('$baseUrl/api/translations');
 
     final request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $jwtToken'
@@ -161,7 +158,6 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = await response.stream.bytesToString();
         final decodedResponse = jsonDecode(responseData);
-        print(response.statusCode);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(decodedResponse['message'])),
@@ -193,86 +189,44 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     super.dispose();
   }
 
-Widget _buildMediaPreview() {
-  if (_mediaFile == null) {
-    return const Text(
-      'No media selected',
-      style: TextStyle(fontSize: 16, color: Colors.black54),
-    );
-  }
-
-  if (_mediaFile!.path.endsWith('.mp4')) {
-    if (_videoController != null && _videoController!.value.isInitialized) {
-      // Check if video needs rotation
-      double videoAspectRatio = _videoController!.value.aspectRatio;
-      int? rotationDegrees = _videoController!.value.rotationCorrection;
-
-      // Use Transform to apply any needed rotation
-      return Stack(
-        children: [
-          AspectRatio(
-            aspectRatio: videoAspectRatio, // Ensure correct aspect ratio
-            child: Transform.rotate(
-              angle: rotationDegrees != null
-                  ? rotationDegrees * (pi / 180) // Convert degrees to radians
-                  : 0,
-              child: VideoPlayer(_videoController!),
-            ),
-          ),
-          Center(
-            child: IconButton(
-              icon: Icon(
-                _videoController!.value.isPlaying
-                    ? Icons.pause
-                    : Icons.play_arrow,
-                color: Colors.white,
-                size: 50,
-              ),
-              onPressed: () {
-                setState(() {
-                  if (_videoController!.value.isPlaying) {
-                    _videoController!.pause();
-                  } else {
-                    _videoController!.play();
-                  }
-                });
-              },
-            ),
-          ),
-        ],
-      );
-    } else {
-      return const CircularProgressIndicator();
-    }
-  } else {
-    try {
-      return Image.file(
-        File(_mediaFile!.path),
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-      );
-    } catch (e) {
+  Widget _buildMediaPreview() {
+    if (_mediaFile == null) {
       return const Text(
-        'Error loading image',
-        style: TextStyle(fontSize: 16, color: Colors.red),
+        'No media selected',
+        style: TextStyle(fontSize: 16, color: Colors.black54),
       );
     }
-  }
-}
-String _formatTranslatedText(String? text) {
-  if (text == null || text.isEmpty) {
-    return 'No translation';
+
+    if (_mediaFile!.path.endsWith('.mp4')) {
+      return VideoWidget(videoUrl: _mediaFile!.path); // Using VideoWidget
+    } else {
+      try {
+        return Image.file(
+          File(_mediaFile!.path),
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+        );
+      } catch (e) {
+        return const Text(
+          'Error loading image',
+          style: TextStyle(fontSize: 16, color: Colors.red),
+        );
+      }
+    }
   }
 
-  // Remove brackets and commas, then join words with a space
-  return text
-      .replaceAll('[', '')  // Remove opening brackets
-      .replaceAll(']', '')  // Remove closing brackets
-      .replaceAll(',', '')  // Remove commas
-      .trim();  // Trim any leading or trailing whitespace
-}
+  String _formatTranslatedText(String? text) {
+    if (text == null || text.isEmpty) {
+      return 'No translation';
+    }
 
+    return text
+        .replaceAll('[', '')
+        .replaceAll(']', '')
+        .replaceAll(',', '')
+        .trim();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -341,5 +295,71 @@ String _formatTranslatedText(String? text) {
         ),
       ),
     );
+  }
+}
+
+class VideoWidget extends StatefulWidget {
+  final String videoUrl;
+
+  const VideoWidget({Key? key, required this.videoUrl}) : super(key: key);
+
+  @override
+  _VideoWidgetState createState() => _VideoWidgetState();
+}
+
+class _VideoWidgetState extends State<VideoWidget> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.file(File(widget.videoUrl))
+      ..initialize().then((_) {
+        setState(() {});
+        _controller.play();
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+     final quarterTurns = 45;
+    return _controller.value.isInitialized
+            ? Stack(
+                children: [
+                  RotatedBox(quarterTurns: quarterTurns,
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio*2,
+                      child: VideoPlayer(_controller),
+                    ),
+                  ),
+                  Center(
+                    child: IconButton(
+                      icon: Icon(
+                        _controller.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: Colors.white,
+                        size: 50,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (_controller.value.isPlaying) {
+                            _controller.pause();
+                          } else {
+                            _controller.play();
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              )
+            : const Center(child: CircularProgressIndicator());
   }
 }
