@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sign_speak/screens/login_screen.dart';
-import 'package:sign_speak/screens/media_translation_screen.dart';
 import 'package:sign_speak/widgets/bottom_navigation_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;

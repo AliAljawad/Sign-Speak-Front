@@ -25,9 +25,7 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   String _translation = '';
   bool _isCameraInitialized = false;
   final AudioPlayer _audioPlayer = AudioPlayer();
-  int _lineCount = 0;
   final int _maxLines = 3;
-  final int _lineHeight = 24; // Approximate line height, adjust as needed
   bool _isRecording = false;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final baseUrl = dotenv.env['BASE_URL'];
