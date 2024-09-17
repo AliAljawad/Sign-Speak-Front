@@ -189,117 +189,122 @@ class ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text(
+        'Profile',
+        style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
       ),
-      body: _isUserLoading
+      centerTitle: true,
+    ),
+    resizeToAvoidBottomInset: true,  // This ensures the layout resizes when the keyboard is open
+    body: SafeArea(
+      child: _isUserLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: _isEditing ? _pickImage : null,
-                    child: CircleAvatar(
-  radius: 50,
-  backgroundImage: _profileImage != null
-      ? FileImage(_profileImage!)
-      : _profileImageUrl.isNotEmpty
-          ? NetworkImage('$baseUrl/storage/$_profileImageUrl')
-          : const AssetImage('assets/images/default_image.jpg') as ImageProvider,
-  child: _profileImage == null && _profileImageUrl.isEmpty
-      ? const Icon(Icons.camera_alt, size: 50, color: Colors.white)
-      : null,
-),
-                  ),
-                  const SizedBox(height: 30),
-                  TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Name',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(8.0),
+          : SingleChildScrollView(  // Wrap with SingleChildScrollView
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: _isEditing ? _pickImage : null,
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: _profileImage != null
+                            ? FileImage(_profileImage!)
+                            : _profileImageUrl.isNotEmpty
+                                ? NetworkImage('$baseUrl/storage/$_profileImageUrl')
+                                : const AssetImage('assets/images/default_image.jpg') as ImageProvider,
+                        child: _profileImage == null && _profileImageUrl.isEmpty
+                            ? const Icon(Icons.camera_alt, size: 50, color: Colors.white)
+                            : null,
                       ),
                     ),
-                    enabled: _isEditing,
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(8.0),
+                    const SizedBox(height: 30),
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+                      enabled: _isEditing,
                     ),
-                    enabled: _isEditing,
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      hintText: _isEditing ? 'Enter new password if you want to change it' : '',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(8.0),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
+                      enabled: _isEditing,
                     ),
-                    obscureText: true,
-                    enabled: _isEditing,
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _isEditing ? _updateProfile : _toggleEdit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      minimumSize: const Size(double.infinity, 0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        hintText: _isEditing ? 'Enter new password if you want to change it' : '',
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.grey, width: 1.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
+                      obscureText: true,
+                      enabled: _isEditing,
                     ),
-                    child: Text(_isEditing ? 'Save Changes' : 'Edit Profile',style: const TextStyle(color: Colors.white, fontSize: 16))
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () => _logout(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      minimumSize: const Size(double.infinity, 0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _isEditing ? _updateProfile : _toggleEdit,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        minimumSize: const Size(double.infinity, 0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
+                      child: Text(_isEditing ? 'Save Changes' : 'Edit Profile', style: const TextStyle(color: Colors.white, fontSize: 16)),
                     ),
-                    child: const Text('Logout',style: TextStyle(color: Colors.white, fontSize: 16)),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () => _logout(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        minimumSize: const Size(double.infinity, 0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: const Text('Logout', style: TextStyle(color: Colors.white, fontSize: 16)),
+                    ),
+                  ],
+                ),
               ),
             ),
-    );
-  }
+    ),
+  );
+}
 }
