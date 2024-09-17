@@ -123,25 +123,41 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
         } else {
           print('WebSocket is not initialized');
         }
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(const Duration(milliseconds: 300));
       }
     } else {
       print('Camera is not initialized');
     }
   }
 
-  void _updateTranslation(String newText) {
-    setState(() {
-      _translation += ' $newText';
-      _lineCount = '\n$_translation'.split('\n').length;
+void _updateTranslation(String newText) {
+  setState(() {
+    _translation += ' $newText';
 
-      if (_lineCount > _maxLines) {
-        // Reset the translation text if it exceeds the max lines
-        _translation = newText;
-        _lineCount = 1; // Start with the new text as the first line
-      }
-    });
-  }
+    // Estimate the average character width (this is approximate and can vary with different fonts)
+    const double avgCharWidth = 12.0; // Rough estimate for a 24 font size
+
+    // Calculate the available width of the text container
+    final double containerWidth = MediaQuery.of(context).size.width - 40; // Subtracting padding
+
+    // Calculate the number of characters that can fit in one line
+    final int charsPerLine = (containerWidth / avgCharWidth).floor();
+
+    // Calculate the total number of characters in the current translation
+    final int totalChars = _translation.length;
+
+    // Calculate the number of lines based on the character count
+    final int lines = (totalChars / charsPerLine).ceil();
+
+    // Reset the translation if the number of lines exceeds the max allowed
+    if (lines > _maxLines) {
+      _translation = newText; // Reset to the new incoming text
+    }
+  });
+}
+
+
+
   void _sendVideoToApi(XFile videoFile) async {
   final jwtToken = await _storage.read(key: 'jwt_token');
   try {
@@ -213,7 +229,7 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Text(
-                'Translation: $_translation',
+                ' $_translation',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
