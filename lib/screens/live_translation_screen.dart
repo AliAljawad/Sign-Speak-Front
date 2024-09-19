@@ -121,7 +121,7 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
         } else {
           print('WebSocket is not initialized');
         }
-        await Future.delayed(const Duration(milliseconds: 300));
+        await Future.delayed(const Duration(seconds: 1));
       }
     } else {
       print('Camera is not initialized');
@@ -130,6 +130,17 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
 
 void _updateTranslation(String newText) {
   setState(() {
+    // Check if the newText is the same as the last element in the current translation
+    if (_translation.isNotEmpty) {
+      // Split the current translation by spaces and get the last element
+      List<String> translationWords = _translation.trim().split(' ');
+      String lastWord = translationWords.isEmpty ? '' : translationWords.last;
+      // If the newText is the same as the last word, ignore the update
+      if (newText == lastWord) {
+        return;
+      }
+    }
+
     _translation += ' $newText';
 
     // Estimate the average character width (this is approximate and can vary with different fonts)
@@ -153,6 +164,7 @@ void _updateTranslation(String newText) {
     }
   });
 }
+
 
 
 

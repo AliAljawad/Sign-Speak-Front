@@ -67,11 +67,11 @@
 
 
 ### User Screens (Mobile)
-| Login screen  | Register screen | Live Transaltion screen |
+| Login screen  | Register screen |Profile Screen |
 | ---| ---| ---|
-| ![Landing](./readme/assets/Login.gif) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
-| Uploaded Media Screen  | Profile Screen | History Screen |
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
+| ![Landing](./readme/assets/Login.gif) | ![fsdaf](./readme/assets/register.gif) | ![fsdaf](./readme/assets/profile.gif) |
+| Uploaded Media Screen  | Live Transaltion screen | History Screen |
+| ![Landing](./readme/assets/uploadedMedia.gif) | ![fsdaf](./readme/assets/liveTranslation.gif) | ![fsdaf](./readme/assets/history.gif) |
 
 <br><br>
 
