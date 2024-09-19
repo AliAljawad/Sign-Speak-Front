@@ -81,10 +81,16 @@
 
 ###  Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
 
-- This project uses advanced prompt engineering techniques to optimize the interaction with natural language processing models. By skillfully crafting input instructions, we tailor the behavior of the models to achieve precise and efficient language understanding and generation for various tasks and preferences.
+- This project harnesses cutting-edge AI and machine learning technologies to bridge the communication gap between sign language users and the broader community. By integrating a sophisticated AI model trained to recognize American Sign Language (ASL) gestures, the app provides real-time translation from sign language to both speech and text. The app uses Eleven Labs to convert translated text from the model into high-quality speech, ensuring an engaging and natural auditory experience. It features live video translation, and the ability to upload videos or images for translation. Machine learning models analyze hand movements for accurate gesture recognition, and data visualization tools offer insights into user performance and engagement. These innovations create a personalized and inclusive communication experience, enhancing accessibility and interaction for both regular and mute users.
 
-<img src="./readme/assets/unit.png" alt="unit test"/>
-<img src="./readme/assets/unit1.png" alt="unit test"/>
+#### Real-Time Sign Language Translation with WebSocket
+<img src="./readme/assets/websocket.png" alt="Ai model Websocket"/>
+
+#### AI-Powered Sign Language Translation via Image and Video Uploads
+<img src="./readme/assets/imageFastApi.png" alt="uploaded image fast api"/>
+<img src="./readme/assets/videoFastApi.png" alt="uploaded video fast api"/>
+
+
 <br><br>
 
 <!-- AWS Deployment -->
@@ -102,6 +108,9 @@
 ###  Precision in Development: Harnessing the Power of Unit Testing:
 
 - This project employs rigorous unit testing methodologies to ensure the reliability and accuracy of code components. By systematically evaluating individual units of the software, we guarantee a robust foundation, identifying and addressing potential issues early in the development process.
+
+<img src="./readme/assets/unit.png" alt="unit test"/>
+<img src="./readme/assets/unit1.png" alt="unit test"/>
 
 <br><br>
 
