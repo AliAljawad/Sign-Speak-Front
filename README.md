@@ -88,8 +88,13 @@
 
 #### AI-Powered Sign Language Translation via Image and Video Uploads
 <img src="./readme/assets/imageFastApi.png" alt="uploaded image fast api"/>
-<img src="./readme/assets/videoFastApi.png" alt="uploaded video fast api"/>
+<img src="./readme/assets/VideoFastApi.png" alt="uploaded video fast api"/>
 
+#### Speech Generation using Eleven Labs API
+
+This Laravel controller handles text-to-speech conversion using the Eleven Labs API. It generates speech based on the text input provided in the request and returns an audio file in MPEG format.
+
+<img src="./readme/assets/elevenLab.png" alt="Eleven lab api"/>
 
 <br><br>
 
