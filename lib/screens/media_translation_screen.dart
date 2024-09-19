@@ -82,8 +82,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     }
 
     final uri = Uri.parse(_mediaFile!.path.endsWith('.mp4')
-        ? 'http://192.168.0.111:8001/predict_video'
-        : 'http://192.168.0.111:8001/predict_image');
+        ? 'http://10.0.2.2:8001/predict_video'
+        : 'http://10.0.2.2:8001/predict_image');
 
     final request = http.MultipartRequest('POST', uri)
       ..files.add(await http.MultipartFile.fromPath('file', _mediaFile!.path));

@@ -48,7 +48,7 @@ class _LiveTranslationScreenState extends State<LiveTranslationScreen> {
   }
 
   void _connectToWebSocket() async {
-    const url = 'ws://192.168.0.111:8002'; // Your server WebSocket URL
+    const url = 'ws://10.0.2.2:8002'; // Your server WebSocket URL
     final webSocketChannel = WebSocketChannel.connect(Uri.parse(url));
     setState(() {
       _webSocketChannel = webSocketChannel;
