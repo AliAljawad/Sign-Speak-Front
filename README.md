@@ -143,6 +143,10 @@ Ensure that you have the following installed on your machine:
 #### 2. Flutter Frontend Setup
   - Open your Android emulator.
   - Navigate to the Flutter project directory.
+  - Create a `.env` file in the root of your Flutter project and add the following line:
+  ```plaintext
+  BASE_URL=http://10.0.2.2:8000
+  ```
   - Run the following commands:
    ```bash
       flutter pub get
@@ -151,6 +155,13 @@ Ensure that you have the following installed on your machine:
    This will start the Flutter frontend on your emulator.
 #### 3. Laravel Backend Setup
 - Navigate to the Flutter project directory.
+- Create a `.env` file in the root of your Laravel project and add the following lines:
+  ```plaintext
+  DB_DATABASE=signspeak
+  APP_URL=http://10.0.2.2:8000/
+  ELEVEN_LABS_API_KEY='your eleven lab api key'
+  ELEVEN_LABS_VOICE_ID='your voice id'
+  ```
 - Run the following command to serve the backend:
 ```bash
    php artisan serve
