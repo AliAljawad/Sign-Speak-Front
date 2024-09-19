@@ -28,13 +28,18 @@
 
 ### SignSpeak is built using the following technologies:
 
-- This project leverages the [Flutter app development framework](https://flutter.dev/), a versatile platform enabling cross-platform app development with a single codebase for mobile, desktop, and web applications.
-- For data persistence, the app uses **MySQL**, a widely-used open-source relational database management system.
-- The app follows material design guidelines throughout its user interface, ensuring a modern and consistent look.
-- For backend services, **SignSpeak** integrates with:
-  - **Laravel**: A PHP framework for handling the backend API and managing the database.
-  - **Python**: Running the machine learning models for real-time sign language translation via WebSocket and image/video uploads.
-  - **Uvicorn**: Utilized to run the ASGI server for handling Python-based endpoints efficiently.
+- **Backend**: Powered by Laravel, a PHP framework used for handling API requests, database management, and secure user authentication with JWT.
+- **Frontend**: Developed using Flutter, a cross-platform framework that delivers a consistent user experience across mobile, web, and desktop.
+- **Machine Learning**: Python is utilized to power the machine learning models for real-time sign language translation. It processes data received from images, videos, and live camera feeds.
+- **Real-Time Translation**: Enabled using FastAPI, which provides WebSocket connections for efficient communication and real-time interaction.
+- **Database**: MySQL is used to store and manage user data and translation records.
+- **Text-to-Speech**: Eleven Labs is integrated to convert the translated text into speech, offering a smooth user experience for hearing users.
+- **Design**: The app follows Material Design principles for a clean, intuitive interface.
+- **ASGI Server**: Runs using Uvicorn, ensuring fast and scalable Python backend performance.
+- **Hand Landmark Detection**: The project uses MediaPipe for detecting and processing hand landmarks, a critical feature for recognizing sign language gestures.
+- **AI Model**: Trained to recognize both hand's  movements, supporting accurate American Sign Language (ASL) interpretation from live video streams.
+- **Data Security**: All sensitive user data is securely managed and protected using JWT-based authentication mechanisms in Laravel.
+
   
 <br><br>
 <!-- UI UX -->
@@ -43,12 +48,6 @@
 
 > We designed SignSpeak using wireframes and mockups, iterating on the design until we reached the ideal layout for easy navigation and a seamless user experience.
 - Project Figma design [figma](https://www.figma.com/design/jce22W4lDvg7z5WlfgySeo/SignSpeak?node-id=0-1&node-type=canvas&t=CekBLhJ0QhEw6czf-0)
-
-
-### Mockups
-| Home screen  | Menu Screen | Order Screen |
-| ---| ---| ---|
-| ![Landing](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) | ![fsdaf](./readme/demo/1440x1024.png) |
 <br><br>
 
 <!-- Database Design -->
@@ -57,6 +56,7 @@
 ###  Architecting Data Excellence: Innovative Database Design Strategies:
 
 - Insert ER Diagram here
+<img src="./readme/assets/db.png" alt="database diagram"/>
 
 
 <br><br>
@@ -67,11 +67,11 @@
 
 
 ### User Screens (Mobile)
-| Login screen  | Register screen | Landing screen | Loading screen |
-| ---| ---| ---| ---|
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
-| Home screen  | Menu Screen | Order Screen | Checkout Screen |
-| ![Landing](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) | ![fsdaf](https://placehold.co/900x1600) |
+| Login screen  | Register screen |Profile Screen |
+| ---| ---| ---|
+| ![Landing](./readme/assets/Login.gif) | ![fsdaf](./readme/assets/register.gif) | ![fsdaf](./readme/assets/profile.gif) |
+| Uploaded Media Screen  | Live Transaltion screen | History Screen |
+| ![Landing](./readme/assets/uploadedMedia.gif) | ![fsdaf](./readme/assets/liveTranslation.gif) | ![fsdaf](./readme/assets/history.gif) |
 
 <br><br>
 
@@ -81,7 +81,15 @@
 
 ###  Mastering AI Interaction: Unveiling the Power of Prompt Engineering:
 
-- This project uses advanced prompt engineering techniques to optimize the interaction with natural language processing models. By skillfully crafting input instructions, we tailor the behavior of the models to achieve precise and efficient language understanding and generation for various tasks and preferences.
+- This project harnesses cutting-edge AI and machine learning technologies to bridge the communication gap between sign language users and the broader community. By integrating a sophisticated AI model trained to recognize American Sign Language (ASL) gestures, the app provides real-time translation from sign language to both speech and text. The app uses Eleven Labs to convert translated text from the model into high-quality speech, ensuring an engaging and natural auditory experience. It features live video translation, and the ability to upload videos or images for translation. Machine learning models analyze hand movements for accurate gesture recognition, and data visualization tools offer insights into user performance and engagement. These innovations create a personalized and inclusive communication experience, enhancing accessibility and interaction for both regular and mute users.
+
+#### Real-Time Sign Language Translation with WebSocket
+<img src="./readme/assets/websocket.png" alt="Ai model Websocket"/>
+
+#### AI-Powered Sign Language Translation via Image and Video Uploads
+<img src="./readme/assets/imageFastApi.png" alt="uploaded image fast api"/>
+<img src="./readme/assets/videoFastApi.png" alt="uploaded video fast api"/>
+
 
 <br><br>
 
@@ -100,6 +108,9 @@
 ###  Precision in Development: Harnessing the Power of Unit Testing:
 
 - This project employs rigorous unit testing methodologies to ensure the reliability and accuracy of code components. By systematically evaluating individual units of the software, we guarantee a robust foundation, identifying and addressing potential issues early in the development process.
+
+<img src="./readme/assets/unit.png" alt="unit test"/>
+<img src="./readme/assets/unit1.png" alt="unit test"/>
 
 <br><br>
 
