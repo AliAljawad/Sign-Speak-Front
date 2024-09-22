@@ -144,7 +144,7 @@ void _updateTranslation(String newText) {
     _translation += ' $newText';
 
     // Estimate the average character width (this is approximate and can vary with different fonts)
-    const double avgCharWidth = 12.0; // Rough estimate for a 24 font size
+    const double avgCharWidth = 8.0; // Rough estimate for a 24 font size
 
     // Calculate the available width of the text container
     final double containerWidth = MediaQuery.of(context).size.width - 40; // Subtracting padding
@@ -241,7 +241,7 @@ void _updateTranslation(String newText) {
               child: Text(
                 ' $_translation',
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
                 overflow: TextOverflow.visible,

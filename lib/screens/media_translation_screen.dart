@@ -103,7 +103,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
         _sendTranslationForSpeech(_translation);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to get a response from the server')),
+          const SnackBar(
+              content: Text('Failed to get a response from the server')),
         );
       }
     } catch (e) {
@@ -136,7 +137,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred while generating speech: $e')),
+        SnackBar(
+            content: Text('An error occurred while generating speech: $e')),
       );
     }
   }
@@ -147,10 +149,13 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
 
     final request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $jwtToken'
-      ..fields['input_type'] = _mediaFile!.path.endsWith('.mp4') ? 'video' : 'image'
+      ..fields['input_type'] =
+          _mediaFile!.path.endsWith('.mp4') ? 'video' : 'image'
       ..fields['translated_text'] = text
-      ..files.add(await http.MultipartFile.fromPath('translated_audio', audioPath))
-      ..files.add(await http.MultipartFile.fromPath('input_data', _mediaFile!.path));
+      ..files
+          .add(await http.MultipartFile.fromPath('translated_audio', audioPath))
+      ..files.add(
+          await http.MultipartFile.fromPath('input_data', _mediaFile!.path));
 
     try {
       final response = await request.send();
@@ -169,7 +174,8 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred while saving translation: $e')),
+        SnackBar(
+            content: Text('An error occurred while saving translation: $e')),
       );
     }
   }
@@ -198,15 +204,14 @@ class _MediaTranslationPageState extends State<MediaTranslationPage> {
     }
 
     if (_mediaFile!.path.endsWith('.mp4')) {
-  return Center(
-                            child: SizedBox(
-                              width: 200, 
-                              height: 200,
-    child: VideoWidget(videoUrl: _mediaFile!.path), // Using VideoWidget
-  ),
-  );
-}
-else {
+      return Center(
+        child: SizedBox(
+          width: 200,
+          height: 200,
+          child: VideoWidget(videoUrl: _mediaFile!.path), // Using VideoWidget
+        ),
+      );
+    } else {
       try {
         return Image.file(
           File(_mediaFile!.path),
@@ -335,38 +340,39 @@ class _VideoWidgetState extends State<VideoWidget> {
 
   @override
   Widget build(BuildContext context) {
-     final quarterTurns = 45;
+    final quarterTurns = 45;
     return _controller.value.isInitialized
-            ? Stack(
-                children: [
-                  RotatedBox(quarterTurns: quarterTurns,
-                    child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio*2,
-                      child: VideoPlayer(_controller),
-                    ),
+        ? Stack(
+            children: [
+              RotatedBox(
+                quarterTurns: quarterTurns,
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio * 2,
+                  child: VideoPlayer(_controller),
+                ),
+              ),
+              Center(
+                child: IconButton(
+                  icon: Icon(
+                    _controller.value.isPlaying
+                        ? Icons.pause
+                        : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 50,
                   ),
-                  Center(
-                    child: IconButton(
-                      icon: Icon(
-                        _controller.value.isPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow,
-                        color: Colors.white,
-                        size: 50,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          if (_controller.value.isPlaying) {
-                            _controller.pause();
-                          } else {
-                            _controller.play();
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              )
-            : const Center(child: CircularProgressIndicator());
+                  onPressed: () {
+                    setState(() {
+                      if (_controller.value.isPlaying) {
+                        _controller.pause();
+                      } else {
+                        _controller.play();
+                      }
+                    });
+                  },
+                ),
+              ),
+            ],
+          )
+        : const Center(child: CircularProgressIndicator());
   }
 }
